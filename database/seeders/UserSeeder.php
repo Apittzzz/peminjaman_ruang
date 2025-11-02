@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 class UserSeeder extends Seeder
 {
     public function run(): void
-    {
+    { 
         // Create admin user
         User::create([
             'username' => 'admin',

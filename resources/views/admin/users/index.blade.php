@@ -109,12 +109,12 @@
                         </table>
                     </div>
 
-                    <!-- Pagination (if needed in the future) -->
-                    @if($users->hasPages())
+                    <!--  Pagination (if needed in the future) --> 
+                    @if(method_exists($users, 'links'))
                     <div class="d-flex justify-content-center mt-3">
                         {{ $users->links() }}
                     </div>
-                    @endif
+                    @endif 
                 </div>
             </div>
         </div>

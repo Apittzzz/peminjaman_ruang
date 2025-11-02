@@ -24,37 +24,49 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
-     */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+ * Handle an incoming authentication request.
+ */
+public function store(LoginRequest $request): RedirectResponse
+{
+    // Debug session sebelum login
+    \Log::info('Before login - Session ID: ' . session()->getId());
+    
+    $request->authenticate();
 
-        $request->session()->regenerate();
+    $request->session()->regenerate();
 
-        $user = Auth::user();
-        
-        // Redirect berdasarkan role
-        if ($user->isAdmin()) {
-            return redirect()->intended(route('admin.dashboard', absolute: false));
-        } elseif ($user->isPetugas()) {
-            return redirect()->intended(route('petugas.dashboard', absolute: false));
-        } else {
-            return redirect()->intended(route('peminjam.dashboard', absolute: false));
-        }
+    $user = Auth::user();
+    
+    // Debug session setelah login
+    \Log::info('After login - Session ID: ' . session()->getId());
+    \Log::info('User logged in:', [
+        'id' => $user->id_user,
+        'username' => $user->username,
+        'role' => $user->role
+    ]);
+    
+    // Redirect berdasarkan role - PAKAI URL LANGSUNG
+    if ($user->role === 'admin') {
+        return redirect('/admin/dashboard');
+    } elseif ($user->role === 'petugas') {
+        return redirect('/petugas/dashboard');
+    } else {
+        return redirect('/peminjam/dashboard');
     }
+}
 
-    /**
+        /**
      * Destroy an authenticated session.
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        Auth::logout();
 
+        // Regenerate session token untuk keamanan
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
+        // Redirect ke halaman utama setelah logout
         return redirect('/');
     }
 }

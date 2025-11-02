@@ -16,10 +16,10 @@ class PeminjamMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->isPeminjam()) {
-            return $next($request);
+    if (Auth::check() && Auth::user()->isPeminjam()) {
+        return $next($request);
         }
-
-        abort(403, 'Unauthorized action.');
+    
+        return redirect('/login')->with('error', 'Unauthorized access.');
     }
 }

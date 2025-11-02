@@ -1,0 +1,139 @@
+/* Warna utama */
+:root {
+    --navy: #1B3C53;
+    --beige: #EEEEEE;
+    --dark: #f8f9fa;
+    --text-light: #ffffff;
+    --text-dark: #000000;
+    --grey: #6c757d;
+}
+
+/* Reset dan gaya dasar */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--dark);
+    color: var(--text-light);
+}
+
+a {
+    color: var(--grey);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--navy);
+    padding: 1rem;
+}
+
+.navbar a {
+    color: var(--text-light);
+}
+
+/* Tombol */
+.btn {
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--navy);
+    color: var(--text-light);
+}
+
+.btn-primary:hover {
+    background-color: var(--beige);
+    color: var(--text-dark);
+}
+
+.btn-secondary {
+    background-color: var(--beige);
+    color: var(--text-dark);
+}
+
+.btn-secondary:hover {
+    background-color: var(--navy);
+    color: var(--text-light);
+}
+
+/* Card */
+.card {
+    background-color: var(--navy);
+    color: var(--text-light);
+    border: 1px solid var(--beige);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card-header {
+    background-color: var(--beige);
+    color: var(--text-dark);
+    font-weight: bold;
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--navy);
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+/* Tabel */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.table th,
+.table td {
+    border: 1px solid var(--beige);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.table th {
+    background-color: var(--navy);
+    color: var(--text-light);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--dark);
+}
+
+/* Form */
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--beige);
+    border-radius: 4px;
+    background-color: var(--dark);
+    color: var(--text-light);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--navy);
+}
+
+/* Footer */
+footer {
+    background-color: var(--navy);
+    color: var(--text-light);
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}

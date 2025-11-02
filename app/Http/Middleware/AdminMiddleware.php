@@ -15,11 +15,12 @@ class AdminMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
-        if (Auth::check() && Auth::user()->isAdmin()) {
-            return $next($request);
-        }
-
-        abort(403, 'Unauthorized action.');
+{
+    if (Auth::check() && Auth::user()->isAdmin()) {
+        return $next($request);
     }
+    
+    // Redirect ke login dengan error message
+    return redirect('/login')->with('error', 'Unauthorized access.');
+}
 }

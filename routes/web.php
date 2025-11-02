@@ -3,11 +3,19 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\PersetujuanUmumController;
+use App\Http\Controllers\Peminjam\PeminjamanController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RuangController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use App\Models\Peminjaman;
+use Carbon\Carbon;
 
 // Public routes
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 // Authentication routes
@@ -19,29 +27,85 @@ Route::middleware('guest')->group(function () {
 });
 
 // Protected routes
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () 
+{
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     
+    // Jadwal routes (accessible by all authenticated users)
+    Route::get('/jadwal', [JadwalController::class, 'index'])->name('jadwal.index');
+    Route::get('/jadwal/calendar', [JadwalController::class, 'calendar'])->name('jadwal.calendar');
+    
+    // Persetujuan Umum routes (untuk admin dan petugas)
+    Route::middleware(['auth'])->group(function () 
+    {
+
+        // Replace direct controller binding with a closure that first updates expired bookings
+        Route::get('/persetujuan', function ()
+        {
+            $now = Carbon::now();
+
+            // Ambil semua peminjaman yang statusnya approved
+            $peminjamanList = Peminjaman::where('status', 'approved')->get();
+
+            foreach ($peminjamanList as $peminjaman) {
+            // Gabungkan tanggal dan waktu selesai
+            $waktuSelesai = Carbon::parse($peminjaman->tanggal_pinjam . ' ' . $peminjaman->waktu_selesai);
+
+            // Jika waktu selesai sudah lewat, ubah status
+            if ($waktuSelesai->lessThanOrEqualTo($now)){
+            $peminjaman->status = 'selesai';
+            $peminjaman->updated_at = $now;
+            $peminjaman->save();}}
+            return redirect()->back()->with('success', 'Peminjaman yang sudah selesai telah diperbarui.');
+        })->name('persetujuan.index');
+
+
+        Route::post('/persetujuan/{peminjaman}/approve', [PersetujuanUmumController::class, 'approve'])->name('persetujuan.approve');
+        Route::post('/persetujuan/{peminjaman}/reject', [PersetujuanUmumController::class, 'reject'])->name('persetujuan.reject');
+    });
+
     // Admin routes
-Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
-    
-    // Manajemen User
-    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
-    
-    // Manajemen Ruang
-    Route::resource('ruang', \App\Http\Controllers\Admin\RuangController::class);
-});
+    Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+        
+        // Manajemen User
+        Route::resource('users', UserController::class);
+        
+        // Manajemen Ruang
+        Route::resource('ruang', RuangController::class);
+
+        // Laporan routes (akan kita buat)
+        Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan.index');
+        Route::post('/laporan/generate', [\App\Http\Controllers\Admin\LaporanController::class, 'generate'])->name('laporan.generate');
+    });
     
     // Petugas routes
-    Route::middleware('petugas')->prefix('petugas')->name('petugas.')->group(function () {
+    Route::middleware(['petugas'])->prefix('petugas')->name('petugas.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'petugas'])->name('dashboard');
-        // Tambahkan route petugas lainnya di sini
+
+        // allow petugas to manually mark a peminjaman as finished
+        Route::post('/peminjaman/{peminjaman}/complete', function ($peminjamanId) {
+            DB::table('peminjaman')
+                ->where('id_peminjaman', $peminjamanId)
+                ->update(['status' => 'selesai', 'updated_at' => now()]);
+
+            return back()->with('success', 'Peminjaman telah ditandai selesai.');
+        })->name('peminjaman.complete');
+
+        // Laporan routes (akan kita buat)
+        Route::middleware(['auth', 'petugas'])->group(function () {
+            Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+            Route::post('/laporan/generate', [LaporanController::class, 'generate'])->name('laporan.generate');
+        });
     });
     
     // Peminjam routes
-    Route::middleware('peminjam')->prefix('peminjam')->name('peminjam.')->group(function () {
+    Route::middleware(['peminjam'])->prefix('peminjam')->name('peminjam.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'peminjam'])->name('dashboard');
-        // Tambahkan route peminjam lainnya di sini
+        
+        // Peminjaman routes
+        Route::resource('peminjaman', PeminjamanController::class);
+        Route::post('/peminjaman/{peminjaman}/cancel', [PeminjamanController::class, 'cancel'])
+            ->name('peminjaman.cancel');
     });
 });

@@ -16,10 +16,17 @@ class PetugasMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && (Auth::user()->isPetugas() || Auth::user()->isAdmin())) {
+        if (!Auth::check()) {
+            return redirect('/login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $user = Auth::user();
+        
+        // Allow both petugas and admin
+        if ($user->role === 'petugas' || $user->role === 'admin') {
             return $next($request);
         }
 
-        abort(403, 'Unauthorized action.');
+        return redirect('/login')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
     }
 }
