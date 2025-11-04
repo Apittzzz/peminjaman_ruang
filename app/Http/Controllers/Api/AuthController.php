@@ -14,7 +14,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
@@ -26,7 +26,7 @@ class AuthController extends Controller
             ], 422);
         }
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('username', 'password'))) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid credentials'
@@ -34,6 +34,16 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+
+        // Check if user is peminjam
+        if ($user->role !== 'peminjam') {
+            Auth::logout();
+            return response()->json([
+                'success' => false,
+                'message' => 'Access denied. Only peminjam can login via mobile app.'
+            ], 403);
+        }
+
         $token = $user->createToken('API Token')->plainTextToken;
 
         return response()->json([
@@ -49,10 +59,9 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'username' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:peminjam,petugas,admin'
+            'nama' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -64,10 +73,10 @@ class AuthController extends Controller
         }
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'username' => $request->username,
+            'nama' => $request->nama,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role' => 'peminjam', // Force role to peminjam for mobile
         ]);
 
         $token = $user->createToken('API Token')->plainTextToken;

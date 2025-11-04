@@ -28,7 +28,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 // Protected routes
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'peminjam'])->group(function () {
     // Peminjaman routes
     Route::apiResource('peminjaman', ApiPeminjamanController::class);
 
