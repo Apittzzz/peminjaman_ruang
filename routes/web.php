@@ -36,33 +36,19 @@ Route::middleware('auth')->group(function ()
     Route::get('/jadwal/calendar', [JadwalController::class, 'calendar'])->name('jadwal.calendar');
     
     // Persetujuan Umum routes (untuk admin dan petugas)
-    Route::middleware(['auth'])->group(function () 
-    {
+    Route::middleware(['auth', 'petugas'])->group(function () {
 
-        // Replace direct controller binding with a closure that first updates expired bookings
-        Route::get('/persetujuan', function ()
-        {
-            $now = Carbon::now();
+    // Tampilkan halaman persetujuan (menggunakan controller)
+    Route::get('/persetujuan', [PersetujuanUmumController::class, 'index'])
+        ->name('persetujuan.index');
 
-            // Ambil semua peminjaman yang statusnya approved
-            $peminjamanList = Peminjaman::where('status', 'approved')->get();
+    // Aksi approve / reject
+    Route::post('/persetujuan/{peminjaman}/approve', [PersetujuanUmumController::class, 'approve'])
+        ->name('persetujuan.approve');
 
-            foreach ($peminjamanList as $peminjaman) {
-            // Gabungkan tanggal dan waktu selesai
-            $waktuSelesai = Carbon::parse($peminjaman->tanggal_pinjam . ' ' . $peminjaman->waktu_selesai);
-
-            // Jika waktu selesai sudah lewat, ubah status
-            if ($waktuSelesai->lessThanOrEqualTo($now)){
-            $peminjaman->status = 'selesai';
-            $peminjaman->updated_at = $now;
-            $peminjaman->save();}}
-            return redirect()->back()->with('success', 'Peminjaman yang sudah selesai telah diperbarui.');
-        })->name('persetujuan.index');
-
-
-        Route::post('/persetujuan/{peminjaman}/approve', [PersetujuanUmumController::class, 'approve'])->name('persetujuan.approve');
-        Route::post('/persetujuan/{peminjaman}/reject', [PersetujuanUmumController::class, 'reject'])->name('persetujuan.reject');
-    });
+    Route::post('/persetujuan/{peminjaman}/reject', [PersetujuanUmumController::class, 'reject'])
+        ->name('persetujuan.reject');
+});
 
     // Admin routes
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {

@@ -24,6 +24,11 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
 
+        .info-card:hover {
+            transform: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
+
         .form-control, .form-select {
             border-radius: 8px;
             padding: 0.8rem;
@@ -142,6 +147,7 @@
                                     @error('waktu_mulai')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                    <div class="invalid-feedback" id="waktu_mulai_error" style="display: none;">Waktu mulai tidak boleh melebihi jam 15:00</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -153,6 +159,7 @@
                                     @error('waktu_selesai')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                    <div class="invalid-feedback" id="waktu_selesai_error" style="display: none;">Waktu selesai tidak boleh melebihi jam 15:00</div>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +189,7 @@
         </div>
 
         <div class="col-md-4">
-            <div class="card">
+            <div class="card info-card">
                 <div class="card-header bg-info text-white">
                     <h6 class="mb-0"><i class="fas fa-info-circle"></i> Informasi</h6>
                 </div>
@@ -219,6 +226,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const ruangStatus = document.getElementById('ruang-status');
     const tanggalPinjam = document.getElementById('tanggal_pinjam');
     const tanggalKembali = document.getElementById('tanggal_kembali');
+    const waktuMulai = document.getElementById('waktu_mulai');
+    const waktuSelesai = document.getElementById('waktu_selesai');
+    const waktuMulaiError = document.getElementById('waktu_mulai_error');
+    const waktuSelesaiError = document.getElementById('waktu_selesai_error');
+    const form = document.getElementById('peminjamanForm');
+    
+    // Function to validate time
+    function validateTime(timeInput, errorDiv) {
+        const timeValue = timeInput.value;
+        if (timeValue && timeValue > '15:00') {
+            timeInput.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+            return false;
+        } else {
+            timeInput.classList.remove('is-invalid');
+            errorDiv.style.display = 'none';
+            return true;
+        }
+    }
     
     // Update tanggal_kembali min date when tanggal_pinjam changes
     tanggalPinjam.addEventListener('change', function() {
@@ -236,6 +262,27 @@ document.addEventListener('DOMContentLoaded', function() {
             ruangStatus.innerHTML = `<span class="badge bg-success">Tersedia</span>`;
         } else {
             ruangStatus.innerHTML = `<span class="badge bg-secondary">Pilih ruangan terlebih dahulu</span>`;
+        }
+    });
+    
+    // Validate waktu_mulai on change
+    waktuMulai.addEventListener('change', function() {
+        validateTime(waktuMulai, waktuMulaiError);
+    });
+    
+    // Validate waktu_selesai on change
+    waktuSelesai.addEventListener('change', function() {
+        validateTime(waktuSelesai, waktuSelesaiError);
+    });
+    
+    // Validate on form submit
+    form.addEventListener('submit', function(e) {
+        const isWaktuMulaiValid = validateTime(waktuMulai, waktuMulaiError);
+        const isWaktuSelesaiValid = validateTime(waktuSelesai, waktuSelesaiError);
+        
+        if (!isWaktuMulaiValid || !isWaktuSelesaiValid) {
+            e.preventDefault();
+            alert('Waktu peminjaman tidak boleh melebihi jam 15:00');
         }
     });
     
