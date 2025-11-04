@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PeminjamanController as ApiPeminjamanController;
 use App\Http\Controllers\Api\RuangController as ApiRuangController;
 use App\Http\Controllers\Api\JadwalController as ApiJadwalController;
+use App\Http\Controllers\Api\PersetujuanController as ApiPersetujuanController;
+use App\Http\Controllers\Api\UserController as ApiUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,13 +31,26 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
+    // User Profile routes
+    Route::get('/profile', [ApiUserController::class, 'profile']);
+    Route::put('/profile', [ApiUserController::class, 'updateProfile']);
+    Route::get('/statistics', [ApiUserController::class, 'statistics']);
+
     // Peminjaman routes
     Route::apiResource('peminjaman', ApiPeminjamanController::class);
 
     // Ruang routes
     Route::apiResource('ruang', ApiRuangController::class);
+    Route::post('/ruang/check-availability', [ApiRuangController::class, 'checkAvailability']);
 
     // Jadwal routes
     Route::get('/jadwal', [ApiJadwalController::class, 'index']);
     Route::get('/jadwal/calendar', [ApiJadwalController::class, 'calendar']);
+
+    // Persetujuan routes (for petugas and admin)
+    Route::get('/persetujuan', [ApiPersetujuanController::class, 'index']);
+    Route::get('/persetujuan/{peminjaman}', [ApiPersetujuanController::class, 'show']);
+    Route::post('/persetujuan/{id}/approve', [ApiPersetujuanController::class, 'approve']);
+    Route::post('/persetujuan/{id}/reject', [ApiPersetujuanController::class, 'reject']);
+    Route::post('/persetujuan/{id}/complete', [ApiPersetujuanController::class, 'complete']);
 });

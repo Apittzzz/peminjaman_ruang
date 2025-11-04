@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Peminjaman;
-use App\Models\Ruang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
 
 class PeminjamanController extends Controller
 {
@@ -33,8 +31,8 @@ class PeminjamanController extends Controller
             'success' => true,
             'data' => [
                 'peminjaman' => $peminjaman,
-                'status_count' => $statusCount
-            ]
+                'status_count' => $statusCount,
+            ],
         ]);
     }
 
@@ -56,7 +54,7 @@ class PeminjamanController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Validation error',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
@@ -64,7 +62,7 @@ class PeminjamanController extends Controller
         if ($request->waktu_mulai > '15:00' || $request->waktu_selesai > '15:00') {
             return response()->json([
                 'success' => false,
-                'message' => 'Waktu peminjaman tidak boleh melebihi jam 15:00'
+                'message' => 'Waktu peminjaman tidak boleh melebihi jam 15:00',
             ], 422);
         }
 
@@ -73,26 +71,26 @@ class PeminjamanController extends Controller
             ->where('status', '!=', 'cancelled')
             ->where(function ($query) use ($request) {
                 $query->whereBetween('tanggal_pinjam', [$request->tanggal_pinjam, $request->tanggal_kembali])
-                      ->orWhereBetween('tanggal_kembali', [$request->tanggal_pinjam, $request->tanggal_kembali])
-                      ->orWhere(function ($q) use ($request) {
-                          $q->where('tanggal_pinjam', '<=', $request->tanggal_pinjam)
+                    ->orWhereBetween('tanggal_kembali', [$request->tanggal_pinjam, $request->tanggal_kembali])
+                    ->orWhere(function ($q) use ($request) {
+                        $q->where('tanggal_pinjam', '<=', $request->tanggal_pinjam)
                             ->where('tanggal_kembali', '>=', $request->tanggal_kembali);
-                      });
+                    });
             })
             ->where(function ($query) use ($request) {
                 $query->whereBetween('waktu_mulai', [$request->waktu_mulai, $request->waktu_selesai])
-                      ->orWhereBetween('waktu_selesai', [$request->waktu_mulai, $request->waktu_selesai])
-                      ->orWhere(function ($q) use ($request) {
-                          $q->where('waktu_mulai', '<=', $request->waktu_mulai)
+                    ->orWhereBetween('waktu_selesai', [$request->waktu_mulai, $request->waktu_selesai])
+                    ->orWhere(function ($q) use ($request) {
+                        $q->where('waktu_mulai', '<=', $request->waktu_mulai)
                             ->where('waktu_selesai', '>=', $request->waktu_selesai);
-                      });
+                    });
             })
             ->exists();
 
         if ($conflict) {
             return response()->json([
                 'success' => false,
-                'message' => 'Ruangan sudah dipesan pada waktu tersebut'
+                'message' => 'Ruangan sudah dipesan pada waktu tersebut',
             ], 422);
         }
 
@@ -110,7 +108,7 @@ class PeminjamanController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Peminjaman berhasil diajukan',
-            'data' => $peminjaman->load('ruang')
+            'data' => $peminjaman->load('ruang'),
         ], 201);
     }
 
@@ -123,13 +121,13 @@ class PeminjamanController extends Controller
         if ($peminjaman->id_user !== Auth::id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized',
             ], 403);
         }
 
         return response()->json([
             'success' => true,
-            'data' => $peminjaman->load('ruang', 'user')
+            'data' => $peminjaman->load('ruang', 'user'),
         ]);
     }
 
@@ -142,7 +140,7 @@ class PeminjamanController extends Controller
         if ($peminjaman->id_user !== Auth::id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized',
             ], 403);
         }
 
@@ -150,7 +148,7 @@ class PeminjamanController extends Controller
         if ($peminjaman->status !== 'pending') {
             return response()->json([
                 'success' => false,
-                'message' => 'Peminjaman tidak dapat diubah'
+                'message' => 'Peminjaman tidak dapat diubah',
             ], 422);
         }
 
@@ -167,18 +165,18 @@ class PeminjamanController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Validation error',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
         $peminjaman->update($request->only([
-            'id_ruang', 'tanggal_pinjam', 'tanggal_kembali', 'waktu_mulai', 'waktu_selesai', 'keperluan'
+            'id_ruang', 'tanggal_pinjam', 'tanggal_kembali', 'waktu_mulai', 'waktu_selesai', 'keperluan',
         ]));
 
         return response()->json([
             'success' => true,
             'message' => 'Peminjaman berhasil diupdate',
-            'data' => $peminjaman->load('ruang')
+            'data' => $peminjaman->load('ruang'),
         ]);
     }
 
@@ -191,7 +189,7 @@ class PeminjamanController extends Controller
         if ($peminjaman->id_user !== Auth::id()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized',
             ], 403);
         }
 
@@ -199,7 +197,7 @@ class PeminjamanController extends Controller
         if ($peminjaman->status !== 'pending') {
             return response()->json([
                 'success' => false,
-                'message' => 'Peminjaman tidak dapat dibatalkan'
+                'message' => 'Peminjaman tidak dapat dibatalkan',
             ], 422);
         }
 
@@ -207,7 +205,7 @@ class PeminjamanController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Peminjaman berhasil dibatalkan'
+            'message' => 'Peminjaman berhasil dibatalkan',
         ]);
     }
 }
