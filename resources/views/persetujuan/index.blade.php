@@ -12,7 +12,7 @@
         <div class="container-fluid">
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center text">
                         <h4><i class="fas fa-check-circle"></i> Persetujuan Peminjaman</h4>
                         <div>
                             <a href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('petugas.dashboard') }}" 

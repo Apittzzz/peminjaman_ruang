@@ -10,50 +10,6 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <style>
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
-
-        .btn {
-            border-radius: 8px;
-            padding: 0.6rem 1.2rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: #2c3e50;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background: #1a252f;
-            transform: translateY(-2px);
-        }
-
-        .stats-card {
-            transition: all 0.3s ease;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .table {
-            border-radius: 8px;
-            overflow: hidden;
-        }
-    </style>
-
     <div class="row mb-3">
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center">

@@ -11,52 +11,6 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <style>
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
-
-        .btn {
-            border-radius: 8px;
-            padding: 0.6rem 1.2rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .card-header {
-            background: #2c3e50;
-            color: white;
-            border-radius: 12px 12px 0 0;
-        }
-
-        .timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        .timeline-marker {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 1.5rem;
-        }
-    </style>
-
     <div class="row">
         <div class="col-md-8">
             <div class="card">

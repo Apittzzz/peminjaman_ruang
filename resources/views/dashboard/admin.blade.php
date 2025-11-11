@@ -10,57 +10,6 @@
 
 @section('content')
 <div class="container py-4">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .action-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            background: white;
-            padding: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
-
-        .action-card .fas {
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
-        }
-
-        .action-card h4 {
-            color: #2c3e50;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .action-card p {
-            color: #6c757d;
-        }
-
-        .btn-primary {
-            background: #2c3e50;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: #1a252f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-    </style>
-
     <div class="row g-4 justify-content-center">
         <div class="col-md-4">
             <div class="action-card text-center">
@@ -112,12 +61,31 @@
                         <li>Setujui atau tolak peminjaman</li>
                         <li>Lihat detail permohonan</li>
                         <li>Kelola jadwal penggunaan ruang</li>
-                        <li>Generate laporan peminjaman</li>
+                        <li>Monitor status peminjaman</li>
                     </ul>
                 </div>
                 <div class="d-flex gap-2 justify-content-center">
                     <a href="{{ route('admin.peminjaman.index') }}" class="btn btn-primary">Kelola</a>
-                    <a href="{{ route('admin.laporan.index') }}" class="btn btn-outline-secondary">Laporan</a>
+                    <a href="{{ route('jadwal.index') }}" class="btn btn-outline-secondary">Jadwal</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="action-card text-center">
+                <i class="fas fa-file-alt fa-3x mb-3"></i>
+                <h4>Laporan</h4>
+                <p class="text-muted">Generate dan lihat laporan</p>
+                <div class="small text-muted mb-3">
+                    <ul class="text-start">
+                        <li>Laporan peminjaman per periode</li>
+                        <li>Statistik penggunaan ruangan</li>
+                        <li>Top peminjam & ruangan populer</li>
+                        <li>Export data ke CSV/Excel</li>
+                    </ul>
+                </div>
+                <div class="d-flex gap-2 justify-content-center">
+                    <a href="{{ route('admin.laporan.index') }}" class="btn btn-primary">Lihat Laporan</a>
                 </div>
             </div>
         </div>

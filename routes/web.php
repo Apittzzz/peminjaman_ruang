@@ -64,9 +64,9 @@ Route::middleware('auth')->group(function ()
         // Manajemen Peminjaman
         Route::get('/peminjaman', [PersetujuanUmumController::class, 'index'])->name('peminjaman.index');
 
-        // Laporan routes (akan kita buat)
+        // Laporan routes
         Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan.index');
-        Route::post('/laporan/generate', [\App\Http\Controllers\Admin\LaporanController::class, 'generate'])->name('laporan.generate');
+        Route::get('/laporan/export', [\App\Http\Controllers\Admin\LaporanController::class, 'export'])->name('laporan.export');
     });
     
     // Petugas routes
@@ -82,11 +82,9 @@ Route::middleware('auth')->group(function ()
             return back()->with('success', 'Peminjaman telah ditandai selesai.');
         })->name('peminjaman.complete');
 
-        // Laporan routes (akan kita buat)
-        Route::middleware(['auth', 'petugas'])->group(function () {
-            Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
-            Route::post('/laporan/generate', [LaporanController::class, 'generate'])->name('laporan.generate');
-        });
+        // Laporan routes
+        Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/export', [\App\Http\Controllers\Admin\LaporanController::class, 'export'])->name('laporan.export');
     });
     
     // Peminjam routes

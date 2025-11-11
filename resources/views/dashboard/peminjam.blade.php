@@ -10,57 +10,6 @@
 
 @section('content')
 <div class="container py-4">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        
-        .action-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            background: white;
-            padding: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
-
-        .action-card .fas {
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
-        }
-
-        .action-card h4 {
-            color: #2c3e50;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .action-card p {
-            color: #6c757d;
-        }
-
-        .btn-primary {
-            background: #2c3e50;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: #1a252f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-    </style>
-
     <div class="row g-4 justify-content-center">
         <div class="col-md-4">
             <div class="action-card text-center">

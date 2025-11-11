@@ -10,36 +10,7 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
-        .accordion-button {
-            background-color: white;
-            font-weight: 500;
-            color: #2c3e50;
-        }
-        .accordion-button:not(.collapsed) {
-            background-color: #e8f4fd;
-            color: #2c3e50;
-        }
-        .accordion-body {
-            background-color: #ffffff;
-        }
-    </style>
-
-<div class="card">
+<div class="card jadwal-card">
     <div class="card-body">
         <form method="GET" action="{{ route('jadwal.index') }}">
             <div class="row g-6 align-items">

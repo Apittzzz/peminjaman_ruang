@@ -11,59 +11,6 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <style>
-        .card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
-
-        .info-card:hover {
-            transform: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-        }
-
-        .form-control, .form-select {
-            border-radius: 8px;
-            padding: 0.8rem;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: #2c3e50;
-            box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.1);
-        }
-
-        .btn {
-            border-radius: 8px;
-            padding: 0.8rem 1.5rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: #2c3e50;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background: #1a252f;
-            transform: translateY(-2px);
-        }
-
-        .alert {
-            border-radius: 8px;
-            border: none;
-        }
-    </style>
-
     <div class="row">
         <div class="col-md-8">
             <div class="card">
