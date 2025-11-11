@@ -38,4 +38,5 @@ Route::middleware(['auth:sanctum', 'peminjam'])->group(function () {
     // Jadwal routes
     Route::get('/jadwal', [ApiJadwalController::class, 'index']);
     Route::get('/jadwal/calendar', [ApiJadwalController::class, 'calendar']);
+    Route::get('/jadwal/active-bookings', [ApiJadwalController::class, 'activeBookings']);
 });

@@ -6,6 +6,7 @@
     --text-light: #ffffff;
     --text-dark: #000000;
     --grey: #6c757d;
+    --alt: #4b647c;
 }
 
 /* Reset dan gaya dasar */
@@ -45,7 +46,7 @@ a:hover {
 }
 
 .btn-primary {
-    background-color: var(--navy);
+    background-color: var(--alt);
     color: var(--text-light);
 }
 
@@ -129,6 +130,10 @@ select:focus {
     border-color: var(--navy);
 }
 
+.form-text {
+    color: var(--grey);
+}
+
 /* Footer */
 footer {
     background-color: var(--navy);
@@ -137,3 +142,5 @@ footer {
     padding: 1rem;
     margin-top: 2rem;
 }
+
+

@@ -18,21 +18,17 @@ class JadwalController extends Controller
         $lihatSemua = $request->get('semua');
 
         $ruangs = Ruang::with(['peminjaman' => function ($query) use ($selectedTanggal, $lihatSemua) {
-            $query->where('status', 'approved')
-                  ->orderBy('waktu_mulai');
-
+            $query->where('tanggal_pinjam', '<=', $selectedTanggal)
+                  ->where('tanggal_kembali', '>=', $selectedTanggal);
             if (!$lihatSemua) {
-                $query->where('tanggal_pinjam', '<=', $selectedTanggal)
-                      ->where('tanggal_kembali', '>=', $selectedTanggal);
+                $query->where('status', 'approved');
             }
         }, 'peminjaman.user'])->get();
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'ruangs' => $ruangs,
-                'selected_tanggal' => $selectedTanggal
-            ]
+            'data' => $ruangs,
+            'selected_tanggal' => $selectedTanggal
         ]);
     }
 
@@ -45,27 +41,43 @@ class JadwalController extends Controller
         $end = $request->get('end', now()->endOfMonth()->toDateString());
 
         $peminjaman = Peminjaman::with(['user', 'ruang'])
+            ->whereBetween('tanggal_pinjam', [$start, $end])
             ->where('status', 'approved')
-            ->where(function ($query) use ($start, $end) {
-                $query->whereBetween('tanggal_pinjam', [$start, $end])
-                      ->orWhereBetween('tanggal_kembali', [$start, $end])
-                      ->orWhere(function ($q) use ($start, $end) {
-                          $q->where('tanggal_pinjam', '<=', $start)
-                            ->where('tanggal_kembali', '>=', $end);
-                      });
-            })
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'id' => $item->id_peminjaman,
-                    'title' => $item->ruang->nama_ruang . ' - ' . $item->user->name,
-                    'start' => $item->tanggal_pinjam . 'T' . $item->waktu_mulai,
-                    'end' => $item->tanggal_kembali . 'T' . $item->waktu_selesai,
-                    'backgroundColor' => '#2c3e50',
-                    'borderColor' => '#2c3e50',
-                ];
-            });
+            ->get();
 
         return response()->json($peminjaman);
+    }
+
+    /**
+     * Get detailed list of current bookings with user information
+     */
+    public function activeBookings(Request $request)
+    {
+        $selectedTanggal = $request->get('tanggal', date('Y-m-d'));
+        $statusFilter = $request->get('status', 'all'); // all, approved, pending
+
+        $query = Peminjaman::with(['user:id_user,username,nama,email,role', 'ruang:id_ruang,nama_ruang,kapasitas,status,pengguna_default,keterangan_penggunaan'])
+            ->where('tanggal_pinjam', '<=', $selectedTanggal)
+            ->where('tanggal_kembali', '>=', $selectedTanggal);
+
+        // Filter berdasarkan status jika ditentukan
+        if ($statusFilter !== 'all') {
+            $query->where('status', $statusFilter);
+        }
+
+        $bookings = $query->orderBy('tanggal_pinjam')
+                          ->orderBy('waktu_mulai')
+                          ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'bookings' => $bookings,
+                'total' => $bookings->count(),
+                'selected_tanggal' => $selectedTanggal,
+                'status_filter' => $statusFilter
+            ],
+            'message' => 'Daftar peminjaman aktif berhasil diambil'
+        ]);
     }
 }

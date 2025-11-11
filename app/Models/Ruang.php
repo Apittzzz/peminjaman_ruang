@@ -17,6 +17,11 @@ class Ruang extends Model
         'nama_ruang',
         'kapasitas',
         'status',
+        'pengguna_default',
+        'keterangan_penggunaan',
+        'ruang_asal_id',
+        'pengguna_default_temp',
+        'is_temporary_occupied',
     ];
 
     public function peminjaman()

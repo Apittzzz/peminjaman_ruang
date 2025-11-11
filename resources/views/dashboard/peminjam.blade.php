@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('title', 'Dashboard Peminjam')
+
+@section('breadcrumb')
+<li class="breadcrumb-item active" aria-current="page">
+    <i class="fas fa-tachometer-alt"></i> Dashboard Peminjam
+</li>
+@endsection
+
 @section('content')
 <div class="container py-4">
     <style>

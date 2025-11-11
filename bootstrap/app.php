@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Register simple API CORS middleware (custom implementation)
+        $middleware->use([
+            App\Http\Middleware\ApiCors::class,
+        ]);
+
         // Register custom middleware
         $middleware->alias([
             'admin' => App\Http\Middleware\AdminMiddleware::class,

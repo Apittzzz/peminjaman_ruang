@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Peminjaman;
 use App\Models\Ruang;
+use App\Services\RoomRelocationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,7 +50,16 @@ class PersetujuanUmumController extends Controller
 
         $peminjaman->ruang->update(['status' => 'dipakai']);
 
-        return redirect()->back()->with('success', 'Peminjaman berhasil disetujui.');
+        // Pindahkan pengguna default jika ada
+        $relocationService = new RoomRelocationService();
+        $relocationResult = $relocationService->relocateDefaultUser($peminjaman);
+        
+        $message = 'Peminjaman berhasil disetujui.';
+        if ($relocationResult['relocated']) {
+            $message .= ' ' . $relocationResult['message'];
+        }
+
+        return redirect()->back()->with('success', $message);
     }
 
     public function reject(Request $request, $id)

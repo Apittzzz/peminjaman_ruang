@@ -5,21 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Sistem Peminjaman Ruang</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #1B3C53;
+            --primary-dark: #214740ff;
+        }
+
         body {
             background-color: #f8f9fa;
             height: 100vh;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
+
         .register-container {
             max-width: 400px;
             width: 100%;
             padding: 15px;
             margin: auto;
         }
+
         .card {
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border: none;
+            border-radius: 10px;
+        }
+
+        .card-header {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .card-header h4 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(22, 160, 133, 0.25);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -76,7 +141,7 @@
                 </form>
 
                 <div class="text-center mt-3">
-                    <p>Sudah punya akun? <a href="{{ route('login') }}">Login di sini</a></p>
+                    <p>Sudah punya akun? <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt me-1"></i>Login di sini</a></p>
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Peminjaman;
 use App\Models\Ruang;
+use App\Services\RoomRelocationService;
 use Carbon\Carbon;
 
 class MarkFinishedBookings extends Command
@@ -15,14 +16,21 @@ class MarkFinishedBookings extends Command
     public function handle()
     {
         $now = Carbon::now();
+        $relocationService = new RoomRelocationService();
 
         // 1. Tandai peminjaman approved yang sudah lewat sebagai selesai
         $approved = Peminjaman::where('status', 'approved')->get();
         foreach ($approved as $p) {
-            $end = Carbon::parse($p->tanggal_pinjam . ' ' . $p->waktu_selesai);
+            $end = Carbon::parse($p->tanggal_kembali . ' ' . $p->waktu_selesai);
             if ($end->lessThanOrEqualTo($now)) {
                 $p->status = 'selesai';
                 $p->save();
+                
+                // Kembalikan pengguna default ke ruangan aslinya
+                $returnResult = $relocationService->returnDefaultUser($p);
+                if ($returnResult['returned']) {
+                    $this->info($returnResult['message']);
+                }
             }
         }
 
@@ -34,11 +42,16 @@ class MarkFinishedBookings extends Command
                 ->get()
                 ->filter(function ($p) use ($now) {
                     $start = Carbon::parse($p->tanggal_pinjam . ' ' . $p->waktu_mulai);
-                    $end = Carbon::parse($p->tanggal_pinjam . ' ' . $p->waktu_selesai);
+                    $end = Carbon::parse($p->tanggal_kembali . ' ' . $p->waktu_selesai);
                     return $now->between($start, $end);
                 });
 
-            $ruang->status = $aktif->isNotEmpty() ? 'dipakai' : 'kosong';
+            // Jika tidak ada peminjaman aktif dan tidak sedang menampung pengguna sementara
+            if ($aktif->isEmpty()) {
+                $ruang->status = $ruang->is_temporary_occupied ? 'dipakai' : 'tersedia';
+            } else {
+                $ruang->status = 'dipakai';
+            }
             $ruang->save();
         }
 

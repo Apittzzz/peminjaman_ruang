@@ -47,8 +47,8 @@ class PeminjamanController extends Controller
             'id_ruang' => 'required|exists:ruang,id_ruang',
             'tanggal_pinjam' => 'required|date|after_or_equal:today',
             'tanggal_kembali' => 'required|date|after_or_equal:tanggal_pinjam',
-            'waktu_mulai' => 'required|date_format:H:i|before:waktu_selesai',
-            'waktu_selesai' => 'required|date_format:H:i|after:waktu_mulai',
+            'waktu_mulai' => 'required|date_format:H:i',
+            'waktu_selesai' => 'required|date_format:H:i',
             'keperluan' => 'required|string|max:500',
         ]);
 
@@ -60,15 +60,17 @@ class PeminjamanController extends Controller
             ], 422);
         }
 
-        // Check if time exceeds 15:00
-        if ($request->waktu_mulai > '15:00' || $request->waktu_selesai > '15:00') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Waktu peminjaman tidak boleh melebihi jam 15:00'
-            ], 422);
+        // Validasi khusus: jika tanggal sama, waktu selesai harus lebih dari waktu mulai
+        if ($request->tanggal_pinjam === $request->tanggal_kembali) {
+            if ($request->waktu_selesai <= $request->waktu_mulai) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pada hari yang sama, waktu selesai harus lebih dari waktu mulai'
+                ], 422);
+            }
         }
 
-        // Check for conflicting bookings
+        // Validate time range
         $conflict = Peminjaman::where('id_ruang', $request->id_ruang)
             ->where('status', '!=', 'cancelled')
             ->where(function ($query) use ($request) {

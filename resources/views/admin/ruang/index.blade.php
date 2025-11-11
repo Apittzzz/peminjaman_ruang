@@ -41,6 +41,7 @@
                                     <th>Nama Ruang</th>
                                     <th>Kapasitas</th>
                                     <th>Status</th>
+                                    <th>Pengguna Default</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -54,6 +55,16 @@
                                         <span class="badge bg-{{ $ruang->status == 'kosong' ? 'success' : 'danger' }}">
                                             {{ $ruang->status }}
                                         </span>
+                                    </td>
+                                    <td>
+                                        @if($ruang->pengguna_default)
+                                            {{ $ruang->pengguna_default }}
+                                            @if($ruang->keterangan_penggunaan)
+                                                <br><small class="text-muted">{{ $ruang->keterangan_penggunaan }}</small>
+                                            @endif
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.ruang.show', $ruang->id_ruang) }}" class="btn btn-info btn-sm">
@@ -73,7 +84,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="5" class="text-center">Tidak ada data ruang.</td>
+                                    <td colspan="6" class="text-center">Tidak ada data ruang.</td>
                                 </tr>
                                 @endforelse
                             </tbody>

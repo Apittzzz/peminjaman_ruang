@@ -147,7 +147,7 @@
                                     @error('waktu_mulai')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <div class="invalid-feedback" id="waktu_mulai_error" style="display: none;">Waktu mulai tidak boleh melebihi jam 15:00</div>
+                                    <div class="invalid-feedback" id="waktu_mulai_error" style="display: none;">Waktu mulai harus diisi</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -159,7 +159,7 @@
                                     @error('waktu_selesai')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <div class="invalid-feedback" id="waktu_selesai_error" style="display: none;">Waktu selesai tidak boleh melebihi jam 15:00</div>
+                                    <div class="invalid-feedback" id="waktu_selesai_error" style="display: none;">Waktu selesai harus diisi</div>
                                 </div>
                             </div>
                         </div>
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to validate time
     function validateTime(timeInput, errorDiv) {
         const timeValue = timeInput.value;
-        if (timeValue && timeValue > '15:00') {
+        if (!timeValue) {
             timeInput.classList.add('is-invalid');
             errorDiv.style.display = 'block';
             return false;
@@ -246,12 +246,41 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Function to validate time range
+    function validateTimeRange() {
+        const startDate = tanggalPinjam.value;
+        const endDate = tanggalKembali.value;
+        const startTime = waktuMulai.value;
+        const endTime = waktuSelesai.value;
+        
+        // Skip validation if any field is empty
+        if (!startDate || !endDate || !startTime || !endTime) {
+            return true;
+        }
+        
+        // If same date, end time must be after start time
+        if (startDate === endDate) {
+            if (endTime <= startTime) {
+                waktuSelesai.classList.add('is-invalid');
+                waktuSelesaiError.textContent = 'Waktu selesai harus lebih dari waktu mulai pada hari yang sama';
+                waktuSelesaiError.style.display = 'block';
+                return false;
+            }
+        }
+        
+        // If different dates, any time is valid
+        waktuSelesai.classList.remove('is-invalid');
+        waktuSelesaiError.style.display = 'none';
+        return true;
+    }
+    
     // Update tanggal_kembali min date when tanggal_pinjam changes
     tanggalPinjam.addEventListener('change', function() {
         tanggalKembali.min = this.value;
         if (tanggalKembali.value && tanggalKembali.value < this.value) {
             tanggalKembali.value = this.value;
         }
+        validateTimeRange();
     });
     
     // Update ruang status
@@ -265,24 +294,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Validate tanggal_kembali on change
+    tanggalKembali.addEventListener('change', function() {
+        validateTimeRange();
+    });
+    
     // Validate waktu_mulai on change
     waktuMulai.addEventListener('change', function() {
         validateTime(waktuMulai, waktuMulaiError);
+        validateTimeRange();
     });
     
     // Validate waktu_selesai on change
     waktuSelesai.addEventListener('change', function() {
         validateTime(waktuSelesai, waktuSelesaiError);
+        validateTimeRange();
     });
     
     // Validate on form submit
     form.addEventListener('submit', function(e) {
         const isWaktuMulaiValid = validateTime(waktuMulai, waktuMulaiError);
         const isWaktuSelesaiValid = validateTime(waktuSelesai, waktuSelesaiError);
+        const isTimeRangeValid = validateTimeRange();
         
-        if (!isWaktuMulaiValid || !isWaktuSelesaiValid) {
+        if (!isWaktuMulaiValid || !isWaktuSelesaiValid || !isTimeRangeValid) {
             e.preventDefault();
-            alert('Waktu peminjaman tidak boleh melebihi jam 15:00');
+            if (!isTimeRangeValid) {
+                alert('Pada hari yang sama, waktu selesai harus lebih dari waktu mulai');
+            } else {
+                alert('Waktu peminjaman harus diisi dengan lengkap');
+            }
         }
     });
     

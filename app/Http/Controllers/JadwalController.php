@@ -15,6 +15,7 @@ class JadwalController extends Controller
 {
     $selectedTanggal = $request->get('tanggal', date('Y-m-d'));
     $lihatSemua = $request->get('semua');
+    $statusFilter = $request->get('status', 'all'); // all, kosong, dipakai
 
     $ruangs = Ruang::with(['peminjaman' => function ($query) use ($selectedTanggal, $lihatSemua) {
         $query->where('status', 'approved')
@@ -24,9 +25,32 @@ class JadwalController extends Controller
             $query->where('tanggal_pinjam', '<=', $selectedTanggal)
                   ->where('tanggal_kembali', '>=', $selectedTanggal);
         }
-    }, 'peminjaman.user'])->get();
+    }, 'peminjaman.user']);
 
-    return view('jadwal.index', compact('ruangs', 'selectedTanggal'));
+    // Filter berdasarkan status ruangan
+    if ($statusFilter === 'kosong') {
+        $ruangs = $ruangs->where('status', 'kosong')
+                         ->whereDoesntHave('peminjaman', function ($query) use ($selectedTanggal, $lihatSemua) {
+                             if (!$lihatSemua) {
+                                 $query->where('tanggal_pinjam', '<=', $selectedTanggal)
+                                       ->where('tanggal_kembali', '>=', $selectedTanggal);
+                             }
+                         });
+    } elseif ($statusFilter === 'dipakai') {
+        $ruangs = $ruangs->where(function ($query) use ($selectedTanggal, $lihatSemua) {
+            $query->where('status', 'dipakai')
+                  ->orWhereHas('peminjaman', function ($subQuery) use ($selectedTanggal, $lihatSemua) {
+                      if (!$lihatSemua) {
+                          $subQuery->where('tanggal_pinjam', '<=', $selectedTanggal)
+                                   ->where('tanggal_kembali', '>=', $selectedTanggal);
+                      }
+                  });
+        });
+    }
+
+    $ruangs = $ruangs->get();
+
+    return view('jadwal.index', compact('ruangs', 'selectedTanggal', 'statusFilter'));
 }
     /*
     public function index(Request $request)

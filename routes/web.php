@@ -8,6 +8,7 @@ use App\Http\Controllers\PersetujuanUmumController;
 use App\Http\Controllers\Peminjam\PeminjamanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RuangController;
+use App\Http\Controllers\Admin\LaporanController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Models\Peminjaman;
@@ -59,6 +60,9 @@ Route::middleware('auth')->group(function ()
         
         // Manajemen Ruang
         Route::resource('ruang', RuangController::class);
+
+        // Manajemen Peminjaman
+        Route::get('/peminjaman', [PersetujuanUmumController::class, 'index'])->name('peminjaman.index');
 
         // Laporan routes (akan kita buat)
         Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan.index');

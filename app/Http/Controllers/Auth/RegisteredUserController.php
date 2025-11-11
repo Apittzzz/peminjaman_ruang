@@ -44,8 +44,8 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(route('peminjam.dashboard', absolute: false));
+        // Do not auto-login after registration for mobile-first flow.
+        // Instead redirect user to the login page so they can authenticate.
+        return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan login.');
     }
 }

@@ -55,30 +55,28 @@ class PeminjamanController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi dasar
         $request->validate([
             'id_ruang' => 'required|exists:ruang,id_ruang',
             'tanggal_pinjam' => 'required|date|after_or_equal:today',
             'tanggal_kembali' => 'required|date|after_or_equal:tanggal_pinjam',
             'waktu_mulai' => 'required',
-            'waktu_selesai' => 'required|after:waktu_mulai',
+            'waktu_selesai' => 'required',
             'keperluan' => 'required|string|max:500',
         ]);
 
-
-        /*
-        $request->validate([
-            'id_ruang' => 'required|exists:ruang,id_ruang',
-            'tanggal_pinjam' => 'required|date|after_or_equal:today',
-            'tanggal_kembali' => 'required|date|after_or_equal:tanggal_pinjam',
-            'waktu_mulai' => 'required',
-            'waktu_selesai' => 'required|after:waktu_mulai',
-            'keperluan' => 'required|string|max:500',
-        ]);
-        */
+        // Validasi khusus: jika tanggal sama, waktu selesai harus lebih dari waktu mulai
+        if ($request->tanggal_pinjam === $request->tanggal_kembali) {
+            if ($request->waktu_selesai <= $request->waktu_mulai) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'Pada hari yang sama, waktu selesai harus lebih dari waktu mulai.');
+            }
+        }
 
         // Normalisasi waktu
         $start = Carbon::createFromFormat('Y-m-d H:i', $request->tanggal_pinjam . ' ' . $request->waktu_mulai);
-        $end = Carbon::createFromFormat('Y-m-d H:i', $request->tanggal_pinjam . ' ' . $request->waktu_selesai);
+        $end = Carbon::createFromFormat('Y-m-d H:i', $request->tanggal_kembali . ' ' . $request->waktu_selesai);
         $now = Carbon::now();
 
         if ($request->tanggal_pinjam === $now->toDateString() && $start->lessThanOrEqualTo($now)) {
@@ -99,11 +97,6 @@ class PeminjamanController extends Controller
         // Validasi waktu sudah lewat
         if ($start->lessThanOrEqualTo($now)) {
             return redirect()->back()->withInput()->with('error', 'Waktu mulai sudah lewat. Pilih waktu di masa depan.');
-        }
-
-        // Validasi jam lebih dari 15:00
-        if ((int) $start->format('H') >= 15) {
-            return redirect()->back()->withInput()->with('error', 'Pengajuan setelah jam 15:00 tidak diperbolehkan.');
         }
 
         // Validasi hari Sabtu/Minggu

@@ -28,6 +28,18 @@
                                         </span>
                                     </td>
                                 </tr>
+                                @if($ruang->pengguna_default)
+                                <tr>
+                                    <th>Pengguna Default</th>
+                                    <td>{{ $ruang->pengguna_default }}</td>
+                                </tr>
+                                @endif
+                                @if($ruang->keterangan_penggunaan)
+                                <tr>
+                                    <th>Keterangan Penggunaan</th>
+                                    <td>{{ $ruang->keterangan_penggunaan }}</td>
+                                </tr>
+                                @endif
                                 <tr>
                                     <th>Tanggal Dibuat</th>
                                     <td>{{ $ruang->created_at->format('d/m/Y H:i') }}</td>
