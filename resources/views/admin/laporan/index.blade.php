@@ -3,10 +3,6 @@
 @section('title', 'Laporan Peminjaman Ruangan')
 
 @section('breadcrumb')
-<head> 
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> 
-    </head>
-
 <li class="breadcrumb-item active" aria-current="page">
     <i class="fas fa-file-alt"></i> Laporan Peminjaman
 </li>
@@ -21,7 +17,7 @@
         </div>
         <div class="card-body">
             <form method="GET" action="{{ route('admin.laporan.index') }}" class="row g-3">
-                <div class="col-md-4">
+                <div class="col-12 col-md-4">
                     <label for="periode" class="form-label fw-bold">Pilih Periode:</label>
                     <select name="periode" id="periode" class="form-select" onchange="this.form.submit()">
                         <option value="hari_ini" {{ $periode == 'hari_ini' ? 'selected' : '' }}>Hari Ini</option>
@@ -30,21 +26,21 @@
                         <option value="tahun_ini" {{ $periode == 'tahun_ini' ? 'selected' : '' }}>Tahun Ini</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-12 col-md-4">
                     <label class="form-label fw-bold">Periode Laporan:</label>
                     <div class="alert alert-info mb-0">
                         <i class="fas fa-calendar-alt me-2"></i>
-                        {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} - {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}
+                        <small>{{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} - {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</small>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-12 col-md-4">
                     <label class="form-label fw-bold">Export Laporan:</label>
-                    <div class="d-flex gap-2">
-                        <a href="{{ route('admin.laporan.export', ['periode' => $periode, 'format' => 'excel']) }}" class="btn btn-success flex-fill">
-                            <i class="fas fa-file-excel me-2"></i>Excel
+                    <div class="d-flex flex-column flex-md-row gap-2">
+                        <a href="{{ route('admin.laporan.export', ['periode' => $periode, 'format' => 'excel']) }}" class="btn btn-success">
+                            <i class="fas fa-file-excel me-1"></i>Excel
                         </a>
-                        <a href="{{ route('admin.laporan.export', ['periode' => $periode, 'format' => 'csv']) }}" class="btn btn-info flex-fill">
-                            <i class="fas fa-file-csv me-2"></i>CSV
+                        <a href="{{ route('admin.laporan.export', ['periode' => $periode, 'format' => 'csv']) }}" class="btn btn-info">
+                            <i class="fas fa-file-csv me-1"></i>CSV
                         </a>
                     </div>
                 </div>
@@ -52,9 +48,9 @@
         </div>
     </div>
 
-    <!-- Statistik Cards -->
+    <!-- Statistik Cards - Responsive: 2 per row on mobile, 3 on tablet, 6 on desktop -->
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-6 col-sm-4 col-md-2">
             <div class="card stat-card total">
                 <div class="card-body text-center">
                     <i class="fas fa-clipboard-list stat-icon text-primary"></i>
@@ -63,48 +59,48 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-6 col-sm-4 col-md-2">
             <div class="card stat-card pending">
                 <div class="card-body text-center">
                     <i class="fas fa-clock stat-icon text-warning"></i>
                     <h3 class="mt-2 mb-0">{{ $stats['pending'] }}</h3>
-                    <small class="text-muted">Pending</small>
+                    <small class="text-muted text-light">Pending</small>
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-6 col-sm-4 col-md-2">
             <div class="card stat-card approved">
                 <div class="card-body text-center">
                     <i class="fas fa-check-circle stat-icon text-success"></i>
                     <h3 class="mt-2 mb-0">{{ $stats['approved'] }}</h3>
-                    <small class="text-muted">Approved</small>
+                    <small class="text-muted text-light">Approved</small>
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-6 col-sm-4 col-md-2">
             <div class="card stat-card rejected">
                 <div class="card-body text-center">
                     <i class="fas fa-times-circle stat-icon text-danger"></i>
                     <h3 class="mt-2 mb-0">{{ $stats['rejected'] }}</h3>
-                    <small class="text-muted">Rejected</small>
+                    <small class="text-muted text-light">Rejected</small>
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-6 col-sm-4 col-md-2">
             <div class="card stat-card selesai">
                 <div class="card-body text-center">
                     <i class="fas fa-check-double stat-icon text-secondary"></i>
                     <h3 class="mt-2 mb-0">{{ $stats['selesai'] }}</h3>
-                    <small class="text-muted">Selesai</small>
+                    <small class="text-muted text-light">Selesai</small>
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-6 col-sm-4 col-md-2">
             <div class="card stat-card cancelled">
                 <div class="card-body text-center">
                     <i class="fas fa-ban stat-icon text-secondary"></i>
                     <h3 class="mt-2 mb-0">{{ $stats['cancelled'] }}</h3>
-                    <small class="text-muted">Cancelled</small>
+                    <small class="text-muted text-light">Cancelled</small>
                 </div>
             </div>
         </div>
@@ -131,7 +127,7 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-muted text-center mb-0">Belum ada data</p>
+                        <p class="text-muted text-center mb-0 text-light">Belum ada data</p>
                     @endif
                 </div>
             </div>
@@ -155,7 +151,7 @@
                             @endforeach
                         </div>
                     @else
-                        <p class="text-muted text-center mb-0">Belum ada data</p>
+                        <p class="text-muted text-center mb-0 text-light">Belum ada data</p>
                     @endif
                 </div>
             </div>

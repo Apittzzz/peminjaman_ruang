@@ -73,6 +73,7 @@ a:hover {
     color: var(--text-light);
 }
 
+
 /* Card */
 .card {
     background-color: var(--navy);
@@ -333,41 +334,97 @@ footer {
 
 /* Auth Styles (Login/Register) */
 
-.login-card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+body.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.login-card,
+.register-card {
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
     background: white;
-    width: 24rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    overflow: hidden;
 }
 
-.login-header {
-    background: var(--navy);
+.login-header,
+.register-header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--alt) 100%);
     color: white;
-    padding: 1.5rem;
-    border-radius: 10px 10px 0 0;
-    font-size: 1.25rem;
-}
-
-.login-body {
     padding: 2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
-.register-link {
+.login-body,
+.register-body {
+    padding: 2.5rem;
+}
+
+.register-link,
+.login-link {
     text-align: center;
     margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e2e8f0;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
 }
 
-.register-link a {
+.register-link a,
+.login-link a {
     color: var(--navy);
     text-decoration: none;
     font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-.register-link a:hover {
+.register-link a:hover,
+.login-link a:hover {
+    color: var(--alt);
     text-decoration: underline;
+}
+
+/* Password Toggle Button */
+#togglePassword {
+    
+    border-left: 0;
+    background-color: #dadada;
+    height: 52.1px;
+    align-items: center;
+}
+
+#togglePassword:hover {
+    background-color: #2e2e2e;
+}
+
+#togglePassword:focus {
+    box-shadow: none;
+    border-color: #3a4d5f;
+}
+
+#toggleIcon {
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.input-group .form-control {
+    border-right: 0;
+    padding: 0.8rem;
+}
+
+.input-group .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.1);
+    border-color: #2c3e50;
+}
+
+.input-group .form-control:focus + .btn {
+    border-color: #2c3e50;
 }
 
 /* Utilities & Helpers */
@@ -454,4 +511,443 @@ footer {
     margin-bottom: 1rem;
 }
 
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE OPTIMIZATION
+   ============================================ */
 
+/* Mobile First - Extra Small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    
+    /* Container & Body */
+    body {
+        font-size: 14px;
+    }
+    
+    .container,
+    .container-fluid {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    
+    /* Typography */
+    h1 { font-size: 1.75rem !important; }
+    h2 { font-size: 1.5rem !important; }
+    h3 { font-size: 1.25rem !important; }
+    h4 { font-size: 1.1rem !important; }
+    h5 { font-size: 1rem !important; }
+    h6 { font-size: 0.9rem !important; }
+    
+    /* Navbar */
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .navbar-collapse {
+        margin-top: 0.5rem;
+    }
+    
+    /* Breadcrumb */
+    .breadcrumb {
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    /* Cards */
+    .card {
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+    
+    .card-header {
+        padding: 0.75rem !important;
+        font-size: 0.95rem;
+    }
+    
+    .card-body {
+        padding: 1rem !important;
+    }
+    
+    .card-footer {
+        padding: 0.75rem !important;
+    }
+    
+    /* Action Cards */
+    .action-card {
+        padding: 1.5rem !important;
+        margin-bottom: 1rem;
+    }
+    
+    .action-card .fas {
+        font-size: 2rem !important;
+        margin-bottom: 1rem;
+    }
+    
+    .action-card h4,
+    .action-card h5 {
+        font-size: 1rem !important;
+        margin-bottom: 0.5rem;
+    }
+    
+    .action-card p {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .action-card ul {
+        font-size: 0.8rem;
+        padding-left: 1.25rem;
+    }
+    
+    /* Jadwal & Laporan Cards */
+    .jadwal-card,
+    .laporan-card,
+    .persetujuan-card {
+        padding: 0.75rem !important;
+        margin-bottom: 1rem;
+    }
+    
+    /* Stat Cards */
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+    
+    .stat-card .card-body {
+        padding: 1rem !important;
+    }
+    
+    .stat-icon {
+        font-size: 1.75rem !important;
+    }
+    
+    .stat-card h3 {
+        font-size: 1.5rem !important;
+    }
+    
+    .stat-card p {
+        font-size: 0.75rem !important;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-sm {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-lg {
+        padding: 0.6rem 1.25rem;
+        font-size: 1rem;
+    }
+    
+    .btn i {
+        font-size: 0.85rem;
+    }
+    
+    /* Button Groups - Stack Vertically */
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        width: 100%;
+        border-radius: 8px !important;
+        margin-bottom: 0.5rem;
+    }
+    
+    .d-flex.gap-2 {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+    
+    .d-flex.gap-2 .btn {
+        width: 100%;
+    }
+    
+    /* Forms */
+    .form-control,
+    .form-select {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .form-label {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .form-text {
+        font-size: 0.8rem;
+    }
+    
+    /* Input Groups */
+    .input-group {
+        flex-wrap: wrap;
+        height: 52.1px;
+    }
+    
+    .input-group .btn {
+        width: 100%;
+        margin-top: 0.5rem;
+        
+    }
+    
+    /* Tables */
+    .table {
+        font-size: 0.8rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.5rem !important;
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Hide table columns on mobile with d-none d-md-table-cell */
+    .table .d-none.d-md-table-cell {
+        display: none !important;
+    }
+    
+    /* Accordion */
+    .accordion-button {
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9rem;
+    }
+    
+    .accordion-body {
+        padding: 1rem !important;
+        font-size: 0.85rem;
+    }
+    
+    .accordion-button .badge {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+        margin-left: 0.5rem;
+    }
+    
+    /* Badges */
+    .badge {
+        font-size: 0.7rem !important;
+        padding: 0.3rem 0.6rem !important;
+    }
+    
+    /* Alerts */
+    .alert {
+        padding: 0.75rem !important;
+        font-size: 0.85rem;
+    }
+    
+    .alert h6 {
+        font-size: 0.9rem !important;
+    }
+    
+    /* Modals */
+    .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+    
+    .modal-header {
+        padding: 1rem;
+    }
+    
+    .modal-title {
+        font-size: 1rem;
+    }
+    
+    .modal-body {
+        padding: 1rem;
+    }
+    
+    .modal-footer {
+        padding: 0.75rem;
+        flex-direction: column;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* List Groups */
+    .list-group-item {
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    /* Auth Pages */
+    .login-card,
+    .register-card {
+        margin: 1rem;
+        max-width: 100%;
+        border-radius: 12px;
+    }
+    
+    .login-header,
+    .register-header {
+        padding: 1.5rem;
+        font-size: 1.2rem;
+    }
+    
+    .login-body,
+    .register-body {
+        padding: 1.5rem;
+    }
+    
+    /* Spacing Utilities */
+    .py-4 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+    
+    .py-5 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+    
+    .mb-3, .my-3 {
+        margin-bottom: 1rem !important;
+    }
+    
+    .mb-4, .my-4 {
+        margin-bottom: 1.5rem !important;
+    }
+    
+    .mb-5, .my-5 {
+        margin-bottom: 2rem !important;
+    }
+    
+    /* Grid Adjustments */
+    .row {
+        margin-left: -10px;
+        margin-right: -10px;
+    }
+    
+    .row > * {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    /* Images */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    /* Prevent Horizontal Scroll */
+    body {
+        overflow-x: hidden;
+    }
+    
+    /* Touch Targets - Apple HIG 44px minimum */
+    a, button, .btn, .form-check-input {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Empty State */
+    .empty-state {
+        padding: 2rem 1rem;
+    }
+    
+    .empty-state i {
+        font-size: 3rem;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .action-card {
+        padding: 2rem;
+    }
+    
+    .stat-icon {
+        font-size: 2rem;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .action-card {
+        padding: 2rem;
+    }
+    
+    .stat-card h3 {
+        font-size: 1.75rem;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .container-fluid {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container-fluid {
+        max-width: 1600px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .breadcrumb,
+    .btn,
+    .modal,
+    footer {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+}
+
+/* Custom style untuk toggle password button */
+        #togglePassword {
+            padding: 0.6rem 0.75rem;
+            border-left: 0;
+        }
+        
+        #togglePassword:hover {
+            background-color: #e9ecef;
+        }
+        
+        #toggleIcon {
+            font-size: 1rem;
+        }
+        
+        /* Pastikan input-group rapi */
+        .input-group .form-control {
+            border-right: 0;
+        }
+        
+        .input-group .form-control:focus {
+            border-color: #ced4da;
+            box-shadow: none;
+        }
+        
+        .input-group .form-control:focus + .btn {
+            border-color: #86b7fe;
+        }

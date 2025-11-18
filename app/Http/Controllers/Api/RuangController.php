@@ -37,7 +37,7 @@ class RuangController extends Controller
         $request->validate([
             'nama_ruang' => 'required|string|max:255',
             'kapasitas' => 'required|integer|min:1',
-            'status' => 'required|in:tersedia,tidak tersedia'
+            'status' => 'required|in:kosong,dipakai'
         ]);
 
         $ruang = Ruang::create($request->all());
@@ -76,7 +76,7 @@ class RuangController extends Controller
         $request->validate([
             'nama_ruang' => 'sometimes|string|max:255',
             'kapasitas' => 'sometimes|integer|min:1',
-            'status' => 'sometimes|in:tersedia,tidak tersedia'
+            'status' => 'sometimes|in:kosong,dipakai'
         ]);
 
         $ruang->update($request->all());

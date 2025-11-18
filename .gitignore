@@ -22,3 +22,10 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Development Scripts (optional - uncomment if you don't want to commit test scripts)
+# /scripts/test_scripts/*
+# /scripts/dev_tools/*
+
+# Backup folders
+/backup_*

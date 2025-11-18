@@ -11,7 +11,7 @@
 @section('content')
 <div class="container py-4">
     <div class="row g-4 justify-content-center">
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="action-card text-center">
                 <i class="fas fa-calendar-plus fa-3x mb-3 "></i>
                 <h4>Ajukan Peminjaman</h4>
@@ -24,11 +24,11 @@
                         <li>Tunggu persetujuan dari admin/petugas</li>
                     </ul>
                 </div>
-                <a href="{{ route('peminjam.peminjaman.create') }}" class="btn btn-primary">Ajukan Sekarang</a>
+                <a href="{{ route('peminjam.peminjaman.create') }}" class="btn btn-primary w-100">Ajukan Sekarang</a>
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="action-card text-center">
                 <i class="fas fa-calendar-alt fa-3x mb-3"></i>
                 <h4>Jadwal Ruang</h4>
@@ -41,11 +41,11 @@
                         <li>Pantau jadwal peminjaman yang aktif</li>
                     </ul>
                 </div>
-                <a href="{{ route('jadwal.index') }}" class="btn btn-primary">Lihat Jadwal</a>
+                <a href="{{ route('jadwal.index') }}" class="btn btn-primary w-100">Lihat Jadwal</a>
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
             <div class="action-card text-center">
                 <i class="fas fa-tasks fa-3x mb-3"></i>
                 <h4>Peminjaman Saya</h4>
@@ -58,7 +58,7 @@
                         <li>Lihat detail lengkap peminjaman</li>
                     </ul>
                 </div>
-                <a href="{{ route('peminjam.peminjaman.index') }}" class="btn btn-primary">Lihat Peminjaman</a>
+                <a href="{{ route('peminjam.peminjaman.index') }}" class="btn btn-primary w-100">Lihat Peminjaman</a>
             </div>
         </div>
     </div>

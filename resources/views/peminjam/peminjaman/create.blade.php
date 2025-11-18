@@ -12,7 +12,7 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-12 col-lg-8">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title"><i class="fas fa-plus"></i> Ajukan Peminjaman Ruang</h5>
@@ -29,7 +29,7 @@
                         @csrf
                         
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6">
                                 <div class="mb-3">
                                     <label for="id_ruang" class="form-label">Pilih Ruangan *</label>
                                     <select class="form-select @error('id_ruang') is-invalid @enderror" 
@@ -47,7 +47,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Status Ruangan</label>
                                     <div id="ruang-status">
@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6">
                                 <div class="mb-3">
                                     <label for="tanggal_pinjam" class="form-label">Tanggal Mulai *</label>
                                     <input type="date" class="form-control @error('tanggal_pinjam') is-invalid @enderror" 
@@ -70,7 +70,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6">
                                 <div class="mb-3">
                                     <label for="tanggal_kembali" class="form-label">Tanggal Selesai *</label>
                                     <input type="date" class="form-control @error('tanggal_kembali') is-invalid @enderror" 
@@ -85,7 +85,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6">
                                 <div class="mb-3">
                                     <label for="waktu_mulai" class="form-label">Waktu Mulai *</label>
                                     <input type="time" class="form-control @error('waktu_mulai') is-invalid @enderror" 
@@ -97,7 +97,7 @@
                                     <div class="invalid-feedback" id="waktu_mulai_error" style="display: none;">Waktu mulai harus diisi</div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-12 col-md-6">
                                 <div class="mb-3">
                                     <label for="waktu_selesai" class="form-label">Waktu Selesai *</label>
                                     <input type="time" class="form-control @error('waktu_selesai') is-invalid @enderror" 
@@ -122,7 +122,7 @@
                             <div class="form-label">Maksimal 500 karakter</div>
                         </div>
 
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
                             <a href="{{ route('peminjam.peminjaman.index') }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left"></i> Kembali
                             </a>
@@ -135,30 +135,52 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card info-card">
-                <div class="card-header bg-info text-white">
-                    <h6 class="mb-0"><i class="fas fa-info-circle"></i> Informasi</h6>
+        <div class="col-12 col-lg-4">
+            {{-- Informasi Ketentuan Peminjaman --}}
+            <div class="card info-card mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0"><i class="fas fa-clipboard-list"></i> Ketentuan Peminjaman</h6>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info">
-                        <h6><i class="fas fa-lightbulb"></i> Tips Pengajuan:</h6>
-                        <ul class="mb-0 ps-3">
-                            <li>Pastikan ruangan tersedia pada tanggal dan waktu yang dipilih</li>
-                            <li>Ajukan minimal 1 hari sebelum tanggal peminjaman</li>
-                            <li>Isi keperluan dengan jelas dan lengkap</li>
-                            <li>Status akan berubah dari <span class="badge bg-warning">Pending</span> menjadi 
-                                <span class="badge bg-success">Approved</span> setelah disetujui admin/petugas</li>
-                        </ul>
+                    <div class="alert alert-warning mb-3">
+                        <small><i class="fas fa-exclamation-triangle"></i> <strong>Penting!</strong> Harap baca ketentuan berikut sebelum mengajukan peminjaman.</small>
                     </div>
                     
-                    <div class="mt-3">
-                        <h6>Status Peminjaman:</h6>
+                    <h6 class="text-primary mb-2"> <strong> <i class="fas fa-clock"></i> Waktu Peminjaman</strong></h6>
+                    <ul class="small mb-3">
+                        <li>Ajukan minimal <strong>1 hari</strong> sebelum tanggal peminjaman</li>
+                        <li>Maksimal peminjaman <strong>7 hari berturut-turut</strong></li>
+                        <li>Jam operasional: <strong>07:00 - 15:00</strong></li>
+                        <li>Pastikan waktu selesai > waktu mulai</li>
+                    </ul>
+
+                    <h6 class="text-primary mb-2"> <strong> <i class="fas fa-file-alt"></i> Persyaratan</strong></h6>
+                    <ul class="small mb-3">
+                        <li>Jelaskan keperluan dengan jelas dan lengkap</li>
+                        <li>Sertakan jumlah peserta (jika ada)</li>
+                        <li>Pastikan ruangan sesuai kebutuhan</li>
+                        <li>Cek jadwal ruangan terlebih dahulu</li>
+                    </ul>
+
+                    <h6 class="text-primary mb-2"> <strong> <i class="fas fa-user-tie"></i> Tanggung Jawab </strong></h6>
+                    <ul class="small mb-0">
+                        <li>Peminjam bertanggung jawab atas kerusakan</li>
+                        <li>Wajib mengembalikan ruangan dalam kondisi bersih</li>
+                        <li>Matikan semua peralatan elektronik setelah digunakan</li>
+                        <li>Laporkan segera jika ada kerusakan</li>
+                    </ul> <br>
+
+
+                    <h6 class="text-primary mb-2"> <strong> <i class="fa-solid fa-check-to-slot"></i> Status Peminajaman</strong></h6>
+                    <div class="card-body">
                         <div class="d-flex flex-wrap gap-2">
                             <span class="badge bg-warning">Pending</span>
                             <span class="badge bg-success">Approved</span>
                             <span class="badge bg-danger">Rejected</span>
                             <span class="badge bg-secondary">Cancelled</span>
+                        </div>
+                        <div class="alert alert-info mb-0 py-2">
+                            <small><i class="fas fa-lightbulb"></i> Cek status di menu "Peminjaman Saya"</small>
                         </div>
                     </div>
                 </div>

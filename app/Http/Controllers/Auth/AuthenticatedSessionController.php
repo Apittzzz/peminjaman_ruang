@@ -24,36 +24,82 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
- * Handle an incoming authentication request.
- */
-public function store(LoginRequest $request): RedirectResponse
-{
-    // Debug session sebelum login
-    \Log::info('Before login - Session ID: ' . session()->getId());
-    
-    $request->authenticate();
+     * Handle an incoming authentication request.
+     */
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        try {
+            // Log 1: Login attempt start
+            \Log::info('=== LOGIN ATTEMPT START ===');
+            \Log::info('Request data:', [
+                'username' => $request->username,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+            
+            // Log 2: Session sebelum login
+            \Log::info('Before login - Session ID: ' . session()->getId());
+            \Log::info('Session data before:', session()->all());
+            
+            // Log 3: Authenticate attempt
+            \Log::info('Attempting authentication...');
+            $request->authenticate();
+            \Log::info('✓ Authentication successful');
 
-    $request->session()->regenerate();
+            // Log 4: Session regenerate
+            \Log::info('Regenerating session...');
+            $request->session()->regenerate();
+            \Log::info('✓ Session regenerated');
 
-    $user = Auth::user();
-    
-    // Debug session setelah login
-    \Log::info('After login - Session ID: ' . session()->getId());
-    \Log::info('User logged in:', [
-        'id' => $user->id_user,
-        'username' => $user->username,
-        'role' => $user->role
-    ]);
-    
-    // Redirect berdasarkan role - PAKAI URL LANGSUNG
-    if ($user->role === 'admin') {
-        return redirect('/admin/dashboard');
-    } elseif ($user->role === 'petugas') {
-        return redirect('/petugas/dashboard');
-    } else {
-        return redirect('/peminjam/dashboard');
+            // Log 5: Get authenticated user
+            $user = Auth::user();
+            \Log::info('After login - Session ID: ' . session()->getId());
+            \Log::info('User logged in:', [
+                'id' => $user->id_user,
+                'username' => $user->username,
+                'role' => $user->role,
+                'nama' => $user->nama,
+            ]);
+            
+            // Log 6: Determine redirect URL
+            $redirectUrl = match($user->role) {
+                'admin' => '/admin/dashboard',
+                'petugas' => '/petugas/dashboard',
+                default => '/peminjam/dashboard'
+            };
+            
+            \Log::info('Redirect URL determined:', [
+                'role' => $user->role,
+                'url' => $redirectUrl
+            ]);
+            
+            // Log 7: Before redirect
+            \Log::info('Executing redirect to: ' . $redirectUrl);
+            \Log::info('=== LOGIN ATTEMPT END SUCCESS ===');
+            
+            return redirect($redirectUrl);
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Login validation failed (wrong credentials)
+            \Log::warning('=== LOGIN FAILED - WRONG CREDENTIALS ===');
+            \Log::warning('Username attempted: ' . $request->username);
+            \Log::warning('Validation errors:', $e->errors());
+            throw $e;
+            
+        } catch (\Exception $e) {
+            // Other errors
+            \Log::error('=== LOGIN FAILED - EXCEPTION ===');
+            \Log::error('Error message: ' . $e->getMessage());
+            \Log::error('Error file: ' . $e->getFile() . ':' . $e->getLine());
+            \Log::error('Stack trace:', [
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()->withErrors([
+                'username' => 'Terjadi kesalahan saat login. Error: ' . $e->getMessage(),
+            ])->withInput($request->only('username'));
+        }
     }
-}
 
         /**
      * Destroy an authenticated session.

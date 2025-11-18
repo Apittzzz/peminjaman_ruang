@@ -13,13 +13,13 @@
 <div class="card jadwal-card">
     <div class="card-body">
         <form method="GET" action="{{ route('jadwal.index') }}">
-            <div class="row g-6 align-items">
-                <div class="col-md-3">
+            <div class="row g-3 align-items-end">
+                <div class="col-12 col-md-4">
                     <label for="tanggal" class="form-label fw-bold">Tanggal:</label>
                     <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ $selectedTanggal }}">
                 </div>
                 <!--
-                <div class="col-md-3">
+                <div class="col-12 col-md-3">
                     <label class="form-label fw-bold">&nbsp;</label>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="semua" id="semua" value="1" {{ request('semua') ? 'checked' : '' }}>
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 -->    
-                <div class="col-md-3">
+                <div class="col-12 col-md-4">
                     <label for="status" class="form-label fw-bold">Status Ruangan:</label>
                     <select name="status" id="status" class="form-select">
                         <option value="all" {{ $statusFilter == 'all' ? 'selected' : '' }}>Semua</option>
@@ -37,8 +37,7 @@
                         <option value="dipakai" {{ $statusFilter == 'dipakai' ? 'selected' : '' }}>Dipakai</option>
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-bold">&nbsp;</label>
+                <div class="col-12 col-md-4">
                     <button type="submit" class="btn btn-primary w-100"><i class="fas fa-search me-1"></i>Tampilkan</button>
                 </div>
             </div>
@@ -95,32 +94,95 @@
             </h2>
             <div id="collapse{{ $ruang->id_ruang }}" class="accordion-collapse collapse" aria-labelledby="heading{{ $ruang->id_ruang }}" data-bs-parent="#jadwalRuangan">
                 <div class="accordion-body">
-                    <p class="text-muted">Kapasitas: {{ $ruang->kapasitas }} orang</p>
+                    <p class="text-muted mb-3">
+                        <i class="fas fa-users"></i> Kapasitas: {{ $ruang->kapasitas }} orang
+                        @if($ruang->lokasi)
+                            | <i class="fas fa-map-marker-alt"></i> {{ $ruang->lokasi }}
+                        @endif
+                    </p>
 
-                    @if($ruang->is_temporary_occupied)
-                        <div class="alert alert-warning">
-                            <i class="fas fa-info-circle"></i> <strong>Ruangan ini sedang menampung pengguna sementara</strong><br>
-                            <small>{{ $ruang->keterangan_penggunaan }}</small>
+                    {{-- Informasi Pengguna Default --}}
+                    @if($ruang->pengguna_default && !$ruang->is_temporary_occupied)
+                        <div class="alert alert-info mb-3">
+                            <h6 class="alert-heading mb-2">
+                                <i class="fas fa-user-tag"></i> Pengguna Default Ruangan
+                            </h6>
+                            <p class="mb-1"><strong>{{ $ruang->pengguna_default }}</strong></p>
+                            @if($ruang->keterangan_penggunaan)
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> {{ $ruang->keterangan_penggunaan }}
+                                </small>
+                            @else
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> Ruangan ini memiliki pengguna tetap untuk kegiatan reguler
+                                </small>
+                            @endif
                         </div>
                     @endif
 
+                    {{-- Informasi Temporary Occupant --}}
+                    @if($ruang->is_temporary_occupied)
+                        <div class="alert alert-warning mb-3">
+                            <h6 class="alert-heading mb-2">
+                                <i class="fas fa-exchange-alt"></i> Menampung Pengguna Sementara
+                            </h6>
+                            <p class="mb-1"><strong>{{ $ruang->pengguna_default_temp }}</strong></p>
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> 
+                                @if($ruang->ruangAsal)
+                                    Dipindahkan dari: <strong>{{ $ruang->ruangAsal->nama_ruang }}</strong>
+                                @endif
+                                {{ $ruang->keterangan_penggunaan ? ' - ' . $ruang->keterangan_penggunaan : '' }}
+                            </small>
+                        </div>
+                    @endif
+
+                    {{-- Daftar Peminjaman Aktif --}}
                     @if($ruang->peminjaman && $ruang->peminjaman->count() > 0)
-                        <ul class="list-group">
+                        <h6 class="mb-2"><i class="fas fa-calendar-check"></i> Peminjaman Aktif:</h6>
+                        <ul class="list-group mb-3">
                             @foreach($ruang->peminjaman as $p)
                             <li class="list-group-item">
-                                <strong>{{ $p->user->nama ?? '—' }}</strong><br>
-                                {{ \Carbon\Carbon::parse($p->tanggal_pinjam)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($p->tanggal_kembali)->format('d/m/Y') }}<br>
-                                {{ $p->waktu_mulai }} - {{ $p->waktu_selesai }}<br>
-                                Keperluan: {{ $p->keperluan }}
-                                @if($p->catatan)
-                                    <br><small class="text-muted">Catatan: {{ $p->catatan }}</small>
-                                @endif
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="mb-1">{{ $p->user->nama ?? '—' }}</h6>
+                                        <p class="mb-1">
+                                            <i class="fas fa-calendar"></i> 
+                                            {{ \Carbon\Carbon::parse($p->tanggal_pinjam)->format('d/m/Y') }} - 
+                                            {{ \Carbon\Carbon::parse($p->tanggal_kembali)->format('d/m/Y') }}
+                                        </p>
+                                        <p class="mb-1">
+                                            <i class="fas fa-clock"></i> 
+                                            {{ $p->waktu_mulai }} - {{ $p->waktu_selesai }}
+                                        </p>
+                                        <p class="mb-1">
+                                            <i class="fas fa-clipboard"></i> 
+                                            <strong>Keperluan:</strong> {{ $p->keperluan }}
+                                        </p>
+                                        @if($p->catatan)
+                                            <small class="text-muted">
+                                                <i class="fas fa-sticky-note"></i> {{ $p->catatan }}
+                                            </small>
+                                        @endif
+                                    </div>
+                                    <span class="badge bg-success">Approved</span>
+                                </div>
                             </li>
                             @endforeach
                         </ul>
-                        <p class="mt-2 text-muted">Total peminjam: {{ $ruang->peminjaman->count() }}</p>
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-list"></i> Total peminjaman: {{ $ruang->peminjaman->count() }}
+                        </p>
                     @else
-                        <p class="text-muted">Belum ada peminjaman aktif.</p>
+                        @if(!$ruang->pengguna_default && !$ruang->is_temporary_occupied)
+                            <div class="alert alert-success mb-0">
+                                <i class="fas fa-check-circle"></i> Tidak ada peminjaman aktif. Ruangan tersedia untuk dipinjam.
+                            </div>
+                        @else
+                            <p class="text-muted mb-0">
+                                <i class="fas fa-info-circle"></i> Tidak ada peminjaman dari pihak lain saat ini.
+                            </p>
+                        @endif
                     @endif
                 </div>
             </div>

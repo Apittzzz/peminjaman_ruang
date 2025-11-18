@@ -48,7 +48,14 @@ class MarkFinishedBookings extends Command
 
             // Jika tidak ada peminjaman aktif dan tidak sedang menampung pengguna sementara
             if ($aktif->isEmpty()) {
-                $ruang->status = $ruang->is_temporary_occupied ? 'dipakai' : 'tersedia';
+                // Cek apakah ada pengguna default
+                if (!empty($ruang->pengguna_default)) {
+                    $ruang->status = 'dipakai'; // Ada pengguna default
+                } elseif ($ruang->is_temporary_occupied) {
+                    $ruang->status = 'dipakai'; // Menampung temporary
+                } else {
+                    $ruang->status = 'kosong'; // Benar-benar kosong
+                }
             } else {
                 $ruang->status = 'dipakai';
             }
