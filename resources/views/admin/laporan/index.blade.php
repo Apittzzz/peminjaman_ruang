@@ -39,9 +39,6 @@
                         <a href="{{ route('admin.laporan.export', ['periode' => $periode, 'format' => 'excel']) }}" class="btn btn-success">
                             <i class="fas fa-file-excel me-1"></i>Excel
                         </a>
-                        <a href="{{ route('admin.laporan.export', ['periode' => $periode, 'format' => 'csv']) }}" class="btn btn-info">
-                            <i class="fas fa-file-csv me-1"></i>CSV
-                        </a>
                     </div>
                 </div>
             </form>
@@ -106,58 +103,6 @@
         </div>
     </div>
 
-    <!-- Top 5 Ruangan & User -->
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-info text-white">
-                    <h6 class="mb-0"><i class="fas fa-door-open me-2"></i>Top 5 Ruangan Terpopuler</h6>
-                </div>
-                <div class="card-body">
-                    @if($ruangStats->count() > 0)
-                        <div class="list-group list-group-flush">
-                            @foreach($ruangStats as $index => $stat)
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="badge bg-primary me-2">{{ $index + 1 }}</span>
-                                    <strong>{{ $stat->ruang->nama_ruang ?? '-' }}</strong>
-                                </div>
-                                <span class="badge bg-info rounded-pill">{{ $stat->total }} peminjaman</span>
-                            </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="text-muted text-center mb-0 text-light">Belum ada data</p>
-                    @endif
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h6 class="mb-0"><i class="fas fa-users me-2"></i>Top 5 Peminjam Teraktif</h6>
-                </div>
-                <div class="card-body">
-                    @if($userStats->count() > 0)
-                        <div class="list-group list-group-flush">
-                            @foreach($userStats as $index => $stat)
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="badge bg-primary me-2">{{ $index + 1 }}</span>
-                                    <strong>{{ $stat->user->nama ?? '-' }}</strong>
-                                </div>
-                                <span class="badge bg-success rounded-pill">{{ $stat->total }} peminjaman</span>
-                            </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="text-muted text-center mb-0 text-light">Belum ada data</p>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Tabel Detail Peminjaman -->
     <div class="card">
         <div class="card-header bg-dark text-white">
@@ -204,7 +149,9 @@
                                     @elseif($p->status == 'rejected')
                                         <span class="badge bg-danger">Rejected</span>
                                     @elseif($p->status == 'selesai')
-                                        <span class="badge bg-secondary">Selesai</span>
+                                        <span class="badge bg-info">Selesai</span>
+                                    @elseif($p->status == 'cancelled')
+                                        <span class="badge bg-secondary">Cancelled</span>
                                     @else
                                         <span class="badge bg-secondary">{{ ucfirst($p->status) }}</span>
                                     @endif

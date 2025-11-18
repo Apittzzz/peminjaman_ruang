@@ -35,10 +35,11 @@ class PeminjamanController extends Controller
      * Show the form for creating a new resource.
      */
 
-    public function create()
+    public function create(Request $request)
     {
         $ruangs = Ruang::all(); // ambil semua ruangan
-        return view('peminjam.peminjaman.create', compact('ruangs'));
+        $selectedRuangId = $request->query('ruang_id'); // ambil ruang_id dari query string
+        return view('peminjam.peminjaman.create', compact('ruangs', 'selectedRuangId'));
     }
 
 

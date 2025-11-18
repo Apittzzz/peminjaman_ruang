@@ -37,7 +37,7 @@
                                         <option value="">-- Pilih Ruangan --</option>
                                         @foreach($ruangs as $ruang)
                                             <option value="{{ $ruang->id_ruang }}" 
-                                                {{ old('id_ruang') == $ruang->id_ruang ? 'selected' : '' }}>
+                                                {{ (old('id_ruang') == $ruang->id_ruang || (isset($selectedRuangId) && $selectedRuangId == $ruang->id_ruang)) ? 'selected' : '' }}>
                                                 {{ $ruang->nama_ruang }} (Kapasitas: {{ $ruang->kapasitas }} orang)
                                             </option>
                                         @endforeach
@@ -262,6 +262,12 @@ document.addEventListener('DOMContentLoaded', function() {
             ruangStatus.innerHTML = `<span class="badge bg-secondary">Pilih ruangan terlebih dahulu</span>`;
         }
     });
+    
+    // Trigger ruang status update on page load if ruangan already selected
+    if (ruangSelect.value) {
+        const event = new Event('change');
+        ruangSelect.dispatchEvent(event);
+    }
     
     // Validate tanggal_kembali on change
     tanggalKembali.addEventListener('change', function() {

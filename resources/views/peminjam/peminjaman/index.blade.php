@@ -95,13 +95,15 @@
                                                 'pending' => 'warning',
                                                 'approved' => 'success',
                                                 'rejected' => 'danger',
-                                                'cancelled' => 'secondary'
+                                                'cancelled' => 'secondary',
+                                                'selesai' => 'info'
                                             ];
                                             $statusText = [
                                                 'pending' => 'Menunggu',
                                                 'approved' => 'Disetujui',
                                                 'rejected' => 'Ditolak',
-                                                'cancelled' => 'Dibatalkan'
+                                                'cancelled' => 'Dibatalkan',
+                                                'selesai' => 'Selesai'
                                             ];
                                         @endphp
                                         <span class="badge bg-{{ $statusColors[$item->status] ?? 'secondary' }}">

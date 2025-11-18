@@ -170,19 +170,31 @@
                             </li>
                             @endforeach
                         </ul>
-                        <p class="text-muted mb-0">
+                        <p class="text-muted mb-3">
                             <i class="fas fa-list"></i> Total peminjaman: {{ $ruang->peminjaman->count() }}
                         </p>
                     @else
                         @if(!$ruang->pengguna_default && !$ruang->is_temporary_occupied)
-                            <div class="alert alert-success mb-0">
+                            <div class="alert alert-success mb-3">
                                 <i class="fas fa-check-circle"></i> Tidak ada peminjaman aktif. Ruangan tersedia untuk dipinjam.
+                                @if(Auth::user()->role === 'peminjam')
+                                    <br><small class="text-muted">Klik tombol "Ajukan Peminjaman" di bawah untuk mengajukan peminjaman ruangan ini.</small>
+                                @endif
                             </div>
                         @else
-                            <p class="text-muted mb-0">
+                            <p class="text-muted mb-3">
                                 <i class="fas fa-info-circle"></i> Tidak ada peminjaman dari pihak lain saat ini.
                             </p>
                         @endif
+                    @endif
+
+                    {{-- Tombol Ajukan Peminjaman untuk Peminjam --}}
+                    @if(Auth::user()->role === 'peminjam')
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('peminjam.peminjaman.create', ['ruang_id' => $ruang->id_ruang]) }}" class="btn btn-primary">
+                                <i class="fas fa-plus-circle me-1"></i> Ajukan Peminjaman Ruangan Ini
+                            </a>
+                        </div>
                     @endif
                 </div>
             </div>

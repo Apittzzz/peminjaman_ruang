@@ -21,8 +21,8 @@
                     </ul>
                 </div>
                 <div class="d-flex flex-column flex-md-row gap-2 justify-content-center">
-                    <a href="{{ route('admin.users.index') }}" class="btn btn-primary">Kelola User</a>
-                    <a href="{{ route('admin.users.create') }}" class="btn btn-outline-secondary">Tambah User</a>
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-primary">Kelola</a>
+                    <a href="{{ route('admin.users.create') }}" class="btn btn-outline-secondary">Tambah</a>
                 </div>
             </div>
         </div>
@@ -185,7 +185,20 @@
                                             <small>{{ $booking->waktu_selesai }}</small>
                                         </td>
                                         <td class="d-none d-md-table-cell">{{ Str::limit($booking->keperluan, 30) }}</td>
-                                        <td><span class="badge bg-success">{{ ucfirst($booking->status) }}</span></td>
+                                        <td>
+                                            @php
+                                                $statusColors = [
+                                                    'pending' => 'warning',
+                                                    'approved' => 'success',
+                                                    'rejected' => 'danger',
+                                                    'cancelled' => 'secondary',
+                                                    'selesai' => 'info'
+                                                ];
+                                            @endphp
+                                            <span class="badge bg-{{ $statusColors[$booking->status] ?? 'secondary' }}">
+                                                {{ ucfirst($booking->status) }}
+                                            </span>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>

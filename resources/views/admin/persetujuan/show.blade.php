@@ -28,7 +28,8 @@
                             'pending' => 'warning',
                             'approved' => 'success',
                             'rejected' => 'danger',
-                            'cancelled' => 'secondary'
+                            'cancelled' => 'secondary',
+                            'selesai' => 'info'
                         ];
                     @endphp
 
@@ -78,7 +79,7 @@
                                 <tr>
                                     <th>Status</th>
                                     <td>
-                                        <span class="badge bg-{{ $statusColors[$peminjaman->status] }}">
+                                        <span class="badge bg-{{ $statusColors[$peminjaman->status] ?? 'secondary' }}">
                                             {{ ucfirst($peminjaman->status) }}
                                         </span>
                                     </td>

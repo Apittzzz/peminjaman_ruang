@@ -286,12 +286,12 @@ footer {
     border-left: 4px solid;
 }
 
-.stat-card.pending { border-left-color: #ffc107; }
+.stat-card.pending { border-left-color: #bb8d04; }
 .stat-card.approved { border-left-color: #28a745; }
 .stat-card.rejected { border-left-color: #dc3545; }
 .stat-card.selesai { border-left-color: #6c757d; }
 .stat-card.cancelled { border-left-color: #6c757d; }
-.stat-card.total { border-left-color: #007bff; }
+.stat-card.total { border-left-color: #61adff; }
 
 .stat-icon {
     font-size: 2.5rem;
