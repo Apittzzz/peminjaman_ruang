@@ -47,7 +47,7 @@
                         <li>Laporan peminjaman per periode</li>
                         <li>Statistik penggunaan ruangan</li>
                         <li>Top peminjam & ruangan populer</li>
-                        <li>Export data ke CSV/Excel</li>
+                        <li>Export data ke Excel</li>
                     </ul>
                 </div>
                 <a href="{{ route('petugas.laporan.index') }}" class="btn btn-primary">Lihat Laporan</a>
