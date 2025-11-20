@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-4">
     <div class="row g-4">
-        <div class="col-md-4">
+        <div class="col-12 col-md-6 col-lg-4">
             <div class="action-card text-center">
                 <i class="fas fa-tasks fa-3x mb-3"></i>
                 <h4>Persetujuan Peminjaman</h4>

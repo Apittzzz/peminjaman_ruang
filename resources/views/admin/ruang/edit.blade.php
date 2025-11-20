@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Edit Ruang</h5>
@@ -53,8 +53,10 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                        <a href="{{ route('admin.ruang.index') }}" class="btn btn-secondary">Batal</a>
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                            <a href="{{ route('admin.ruang.index') }}" class="btn btn-secondary">Batal</a>
+                        </div>
                     </form>
                 </div>
             </div>

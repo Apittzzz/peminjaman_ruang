@@ -11,7 +11,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">Edit User: {{ $user->nama }}</h5>
@@ -21,7 +21,7 @@
                     @csrf
                     @method('PUT')
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username *</label>
                                 <input type="text" class="form-control @error('username') is-invalid @enderror" 
@@ -31,7 +31,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="mb-3">
                                 <label for="nama" class="form-label">Nama Lengkap *</label>
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror" 
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password (Kosongkan jika tidak ingin mengubah)</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" 
@@ -55,7 +55,7 @@
                                 <small class="form-text text-muted">Minimal 8 karakter</small>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="mb-3">
                                 <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
                                 <input type="password" class="form-control" 
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-12 col-md-6">
                             <div class="mb-3">
                                 <label for="role" class="form-label">Role *</label>
                                 <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-column flex-sm-row justify-content-between gap-2">
                         <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Kembali
                         </a>

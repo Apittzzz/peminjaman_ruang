@@ -37,26 +37,32 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th class="d-none d-md-table-cell">#</th>
                                     <th>Nama Ruang</th>
-                                    <th>Kapasitas</th>
+                                    <th class="d-none d-lg-table-cell">Kapasitas</th>
                                     <th>Status</th>
-                                    <th>Pengguna Default</th>
+                                    <th class="d-none d-lg-table-cell">Pengguna Default</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($ruangs as $ruang)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $ruang->nama_ruang }}</td>
-                                    <td>{{ $ruang->kapasitas }} orang</td>
+                                    <td class="d-none d-md-table-cell">{{ $loop->iteration }}</td>
                                     <td>
+                                        <strong>{{ $ruang->nama_ruang }}</strong>
+                                        <div class="d-lg-none small text-muted">
+                                            <span class="badge bg-{{ $ruang->status == 'kosong' ? 'success' : 'danger' }}">{{ $ruang->status }}</span>
+                                            <div><i class="fas fa-users"></i> {{ $ruang->kapasitas }} orang</div>
+                                        </div>
+                                    </td>
+                                    <td class="d-none d-lg-table-cell">{{ $ruang->kapasitas }} orang</td>
+                                    <td class="d-none d-lg-table-cell">
                                         <span class="badge bg-{{ $ruang->status == 'kosong' ? 'success' : 'danger' }}">
                                             {{ $ruang->status }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="d-none d-lg-table-cell">
                                         @if($ruang->pengguna_default)
                                             {{ $ruang->pengguna_default }}
                                             @if($ruang->keterangan_penggunaan)
@@ -67,12 +73,14 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.ruang.show', $ruang->id_ruang) }}" class="btn btn-info btn-sm">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('admin.ruang.edit', $ruang->id_ruang) }}" class="btn btn-warning btn-sm">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ route('admin.ruang.show', $ruang->id_ruang) }}" class="btn btn-info btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="{{ route('admin.ruang.edit', $ruang->id_ruang) }}" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </div>
                                         <form action="{{ route('admin.ruang.destroy', $ruang->id_ruang) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')

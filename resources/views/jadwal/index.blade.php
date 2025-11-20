@@ -14,31 +14,36 @@
     <div class="card-body">
         <form method="GET" action="{{ route('jadwal.index') }}">
             <div class="row g-3 align-items-end">
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-3">
+                    <label for="search" class="form-label fw-bold">Cari Ruangan:</label>
+                    <input type="text" 
+                           name="search" 
+                           id="search" 
+                           class="form-control" 
+                           placeholder="Nama ruang, kelas..."
+                           value="{{ $searchQuery ?? '' }}">
+                </div>
+                <div class="col-12 col-md-3">
                     <label for="tanggal" class="form-label fw-bold">Tanggal:</label>
                     <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ $selectedTanggal }}">
                 </div>
-                <!--
                 <div class="col-12 col-md-3">
-                    <label class="form-label fw-bold">&nbsp;</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="semua" id="semua" value="1" {{ request('semua') ? 'checked' : '' }}>
-                        <label class="form-check-label" for="semua">
-                            Lihat semua peminjaman
-                        </label>
-                    </div>
-                </div>
-                -->    
-                <div class="col-12 col-md-4">
                     <label for="status" class="form-label fw-bold">Status Ruangan:</label>
                     <select name="status" id="status" class="form-select">
-                        <option value="all" {{ $statusFilter == 'all' ? 'selected' : '' }}>Semua</option>
+                        <option value="all" {{ $statusFilter == 'all' ? 'selected' : '' }}>Semua Status</option>
                         <option value="kosong" {{ $statusFilter == 'kosong' ? 'selected' : '' }}>Kosong</option>
                         <option value="dipakai" {{ $statusFilter == 'dipakai' ? 'selected' : '' }}>Dipakai</option>
+                        <option value="relocated" {{ $statusFilter == 'relocated' ? 'selected' : '' }}>Pengguna Default Dipindahkan</option>
                     </select>
                 </div>
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-3">
                     <button type="submit" class="btn btn-primary w-100"><i class="fas fa-search me-1"></i>Tampilkan</button>
+                    @if($searchQuery || $statusFilter != 'all')
+                        <a href="{{ route('jadwal.index') }}" class="btn btn-secondary w-100 mt-2">
+                            <i class="fas fa-times me-1"></i>Reset Filter
+                        </a>
+                    @endif
+                    <small class="text-muted text-navy">Cari berdasarkan nama atau pengguna</small>
                 </div>
             </div>
         </form>
@@ -59,30 +64,75 @@
 </div>
 @endif
 
+<!-- Info Hasil Pencarian/Filter -->
+@if($searchQuery || $statusFilter != 'all')
+<div class="alert alert-light border">
+    <div class="row align-items-center">
+        <div class="col-12 col-md-8">
+            <i class="fas fa-filter me-2"></i>
+            <strong>Filter Aktif:</strong>
+            @if($searchQuery)
+                Pencarian: "<strong>{{ $searchQuery }}</strong>"
+            @endif
+            @if($statusFilter != 'all')
+                @if($searchQuery) | @endif
+                Status: <strong>
+                    @if($statusFilter == 'kosong') Kosong
+                    @elseif($statusFilter == 'dipakai') Dipakai
+                    @elseif($statusFilter == 'relocated') Pengguna Default Dipindahkan
+                    @endif
+                </strong>
+            @endif
+        </div>
+        <div class="col-12 col-md-4 text-md-end mt-2 mt-md-0">
+            <span class="badge bg-primary me-2">
+                <i class="fas fa-door-open"></i> {{ $ruangs->count() }} Ruangan Ditemukan
+            </span>
+            <a href="{{ route('jadwal.index') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-times"></i> Reset
+            </a>
+        </div>
+    </div>
+</div>
+@endif
+
     <!-- Jadwal Ruangan Accordion -->
     <div class="accordion" id="jadwalRuangan">
-        @foreach($ruangs as $ruang)
+        @if($ruangs->count() > 0)
+            @foreach($ruangs as $ruang)
         @php
             $hasActiveBooking = $ruang->peminjaman && $ruang->peminjaman->count() > 0;
-            // Prioritas: Jika ada peminjaman aktif = dipakai, jika tidak ada tapi status=dipakai maka tetap dipakai
-            $isOccupied = $hasActiveBooking || $ruang->status === 'dipakai';
-            $statusColor = $isOccupied ? 'danger' : 'success';
-            $statusText = $isOccupied ? 'Dipakai' : 'Kosong';
+            $isRelocated = $ruang->is_temporary_occupied ?? false;
+            // Prioritas status
+            if ($isRelocated) {
+                $statusColor = 'warning';
+                $statusText = 'Dipindahkan Sementara';
+                $statusIcon = 'exchange-alt';
+            } elseif ($hasActiveBooking || $ruang->status === 'dipakai') {
+                $statusColor = 'danger';
+                $statusText = 'Dipakai';
+                $statusIcon = 'times-circle';
+            } else {
+                $statusColor = 'success';
+                $statusText = 'Kosong';
+                $statusIcon = 'check-circle';
+            }
         @endphp
         <div class="accordion-item mb-3">
             <h2 class="accordion-header" id="heading{{ $ruang->id_ruang }}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $ruang->id_ruang }}" aria-expanded="false" aria-controls="collapse{{ $ruang->id_ruang }}">
-                    <i class="fas fa-door-open me-2 text-{{ $statusColor }}"></i>
-                    {{ $ruang->nama_ruang }} —
+                    <i class="fas fa-{{ $statusIcon }} me-2 text-{{ $statusColor }}"></i>
+                    <strong>{{ $ruang->nama_ruang }}</strong>
                     <span class="badge bg-{{ $statusColor }} ms-2">
-                        {{ $statusText }}
+                        <i class="fas fa-{{ $statusIcon }}"></i> {{ $statusText }}
                     </span>
-                    @if($ruang->pengguna_default)
-                        <small class="text-muted ms-2">({{ $ruang->pengguna_default }})</small>
-                    @endif
-                    @if($ruang->is_temporary_occupied)
-                        <small class="badge bg-warning text-dark ms-2">
-                            <i class="fas fa-exchange-alt"></i> Pengguna Sementara: {{ $ruang->pengguna_default_temp }}
+                    @if($isRelocated && $ruang->pengguna_default_temp)
+                        <span class="badge bg-info ms-2" title="Pengguna Default Dipindahkan Sementara">
+                            <i class="fas fa-user-clock"></i> {{ $ruang->pengguna_default_temp }}
+                        </span>
+                    @elseif($ruang->pengguna_default)
+                        <small class="text-muted ms-2">
+                            <i class="fas fa-user"></i> {{ $ruang->pengguna_default }}
                         </small>
                     @endif
                     @if(Auth::user()->role === 'admin')
@@ -96,9 +146,6 @@
                 <div class="accordion-body">
                     <p class="text-muted mb-3">
                         <i class="fas fa-users"></i> Kapasitas: {{ $ruang->kapasitas }} orang
-                        @if($ruang->lokasi)
-                            | <i class="fas fa-map-marker-alt"></i> {{ $ruang->lokasi }}
-                        @endif
                     </p>
 
                     {{-- Informasi Pengguna Default --}}
@@ -200,6 +247,27 @@
             </div>
         </div>
         @endforeach
+        @else
+        <!-- Tidak ada hasil -->
+        <div class="alert alert-info text-center py-5">
+            <i class="fas fa-search fa-3x mb-3"></i>
+            <h5>Tidak ada ruangan ditemukan</h5>
+            <p class="mb-0">
+                @if($searchQuery)
+                    Tidak ada ruangan yang cocok dengan pencarian "<strong>{{ $searchQuery }}</strong>"
+                @elseif($statusFilter !== 'all')
+                    Tidak ada ruangan dengan status "<strong>{{ ucfirst($statusFilter) }}</strong>" pada tanggal ini
+                @else
+                    Tidak ada data ruangan tersedia
+                @endif
+            </p>
+            @if($searchQuery || $statusFilter != 'all')
+                <a href="{{ route('jadwal.index') }}" class="btn btn-primary mt-3">
+                    <i class="fas fa-redo"></i> Reset Filter
+                </a>
+            @endif
+        </div>
+        @endif
     </div>
 
     <!-- Modal Edit Pengguna Default -->

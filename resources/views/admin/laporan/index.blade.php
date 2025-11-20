@@ -114,31 +114,38 @@
                     <table class="table table-hover">
                         <thead class="table-light">
                             <tr>
-                                <th>No</th>
-                                <th>Tanggal Pengajuan</th>
+                                <th class="d-none d-md-table-cell">No</th>
+                                <th class="d-none d-lg-table-cell">Tanggal Pengajuan</th>
                                 <th>Peminjam</th>
-                                <th>Ruangan</th>
-                                <th>Tanggal Pinjam</th>
-                                <th>Waktu</th>
-                                <th>Keperluan</th>
+                                <th class="d-none d-lg-table-cell">Ruangan</th>
+                                <th class="d-none d-md-table-cell">Tanggal Pinjam</th>
+                                <th class="d-none d-lg-table-cell">Waktu</th>
+                                <th class="d-none d-lg-table-cell">Keperluan</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($peminjaman as $index => $p)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $p->created_at->format('d/m/Y H:i') }}</td>
-                                <td>{{ $p->user->nama ?? '-' }}</td>
-                                <td>{{ $p->ruang->nama_ruang ?? '-' }}</td>
+                                <td class="d-none d-md-table-cell">{{ $index + 1 }}</td>
+                                <td class="d-none d-lg-table-cell">{{ $p->created_at->format('d/m/Y H:i') }}</td>
                                 <td>
+                                    <strong>{{ $p->user->nama ?? '-' }}</strong>
+                                    <div class="d-lg-none small text-muted">
+                                        <div><i class="fas fa-door-open"></i> {{ $p->ruang->nama_ruang ?? '-' }}</div>
+                                        <div><i class="fas fa-calendar"></i> {{ \Carbon\Carbon::parse($p->tanggal_pinjam)->format('d/m/Y') }}</div>
+                                        <div class="d-md-none"><i class="fas fa-clock"></i> {{ $p->waktu_mulai }} - {{ $p->waktu_selesai }}</div>
+                                    </div>
+                                </td>
+                                <td class="d-none d-lg-table-cell">{{ $p->ruang->nama_ruang ?? '-' }}</td>
+                                <td class="d-none d-md-table-cell">
                                     {{ \Carbon\Carbon::parse($p->tanggal_pinjam)->format('d/m/Y') }}
                                     @if($p->tanggal_pinjam != $p->tanggal_kembali)
                                         - {{ \Carbon\Carbon::parse($p->tanggal_kembali)->format('d/m/Y') }}
                                     @endif
                                 </td>
-                                <td>{{ $p->waktu_mulai }} - {{ $p->waktu_selesai }}</td>
-                                <td>
+                                <td class="d-none d-lg-table-cell">{{ $p->waktu_mulai }} - {{ $p->waktu_selesai }}</td>
+                                <td class="d-none d-lg-table-cell">
                                     <small>{{ \Illuminate\Support\Str::limit($p->keperluan, 50) }}</small>
                                 </td>
                                 <td>

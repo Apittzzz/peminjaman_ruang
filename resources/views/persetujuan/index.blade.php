@@ -42,50 +42,47 @@
                             @if($peminjaman->count() > 0)
                             <div class="table-responsive">
                                 <table class="table table-bordered">
-                                    <thead class="table-dark">
+                                    <thead style="background-color: white; color: black;">
                                         <tr>
-                                            <th>#</th>
+                                            <th class="d-none d-md-table-cell">#</th>
                                             <th>Peminjam</th>
-                                            <th>Ruangan</th>
-                                            <th>Tanggal</th>
-                                            <th>Waktu</th>
-                                            <th>Keperluan</th>
+                                            <th class="d-none d-lg-table-cell">Ruangan</th>
+                                            <th class="d-none d-md-table-cell">Tanggal</th>
+                                            <th class="d-none d-lg-table-cell">Waktu</th>
+                                            <th class="d-none d-lg-table-cell">Keperluan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($peminjaman as $item)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->user->nama }}</td>
-                                            <td>{{ $item->ruang->nama_ruang }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d/m/Y') }}</td>
-                                            <td>{{ $item->waktu_mulai }} - {{ $item->waktu_selesai }}</td>
-                                            <td>{{ Str::limit($item->keperluan, 50) }}</td>
+                                            <td class="d-none d-md-table-cell">{{ $loop->iteration }}</td>
+                                            <td>
+                                                <strong>{{ $item->user->nama }}</strong>
+                                                <div class="d-md-none small text-muted">
+                                                    <div><i class="fas fa-door-open"></i> {{ $item->ruang->nama_ruang }}</div>
+                                                    <div><i class="fas fa-calendar"></i> {{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d/m/Y') }}</div>
+                                                    <div><i class="fas fa-clock"></i> {{ $item->waktu_mulai }} - {{ $item->waktu_selesai }}</div>
+                                                </div>
+                                            </td>
+                                            <td class="d-none d-lg-table-cell">{{ $item->ruang->nama_ruang }}</td>
+                                            <td class="d-none d-md-table-cell">{{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d/m/Y') }}</td>
+                                            <td class="d-none d-lg-table-cell">{{ $item->waktu_mulai }} - {{ $item->waktu_selesai }}</td>
+                                            <td class="d-none d-lg-table-cell">{{ Str::limit($item->keperluan, 50) }}</td>
                                             <td>
                                                 <form action="{{ route('persetujuan.approve', $item->id_peminjaman) }}" 
                                                     method="POST" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-success btn-sm" 
                                                             onclick="return confirm('Setujui peminjaman ini?')">
-                                                        <i class="fas fa-check"></i> Setujui
+                                                        <i class="fas fa-check"></i><span class="d-none d-lg-inline"> Setujui</span>
                                                     </button>
                                                 </form>
-
-                                                <!-- allow petugas to manually mark as finished -->
-                                                @if(Auth::user()->role === 'petugas')
-                                                    <form action="{{ route('petugas.peminjaman.complete', $item->id_peminjaman) }}" method="POST" class="d-inline ms-1">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-info btn-sm" onclick="return confirm('Tandai peminjaman ini selesai?')">
-                                                            <i class="fas fa-flag-checkered"></i> Selesai
-                                                        </button>
-                                                    </form>
-                                                @endif
 
                                                 <button type="button" class="btn btn-danger btn-sm" 
                                                         data-bs-toggle="modal" 
                                                         data-bs-target="#rejectModal{{ $item->id_peminjaman }}">
-                                                    <i class="fas fa-times"></i> Tolak
+                                                    <i class="fas fa-times"></i><span class="d-none d-lg-inline"> Tolak</span>
                                                 </button>
 
                                                 <!-- Reject Modal -->

@@ -96,7 +96,7 @@
                         <li>Laporan peminjaman per periode</li>
                         <li>Statistik penggunaan ruangan</li>
                         <li>Top peminjam & ruangan populer</li>
-                        <li>Export data ke CSV/Excel</li>
+                        <li>Export data ke Excel</li>
                     </ul>
                 </div>
                 <div class="d-flex gap-2 justify-content-center">

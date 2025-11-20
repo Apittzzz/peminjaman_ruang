@@ -24,46 +24,51 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th class="d-none d-md-table-cell">#</th>
                                 <th>Peminjam</th>
-                                <th>Ruangan</th>
-                                <th>Tanggal</th>
-                                <th>Waktu</th>
-                                <th>Keperluan</th>
-                                <th>Diajukan</th>
+                                <th class="d-none d-lg-table-cell">Ruangan</th>
+                                <th class="d-none d-md-table-cell">Tanggal</th>
+                                <th class="d-none d-lg-table-cell">Waktu</th>
+                                <th class="d-none d-lg-table-cell">Keperluan</th>
+                                <th class="d-none d-lg-table-cell">Diajukan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($peminjaman as $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="d-none d-md-table-cell">{{ $loop->iteration }}</td>
                                 <td>
                                     <strong>{{ $item->user->nama }}</strong>
                                     <br>
                                     <small class="text-muted">@ {{ $item->user->username }}</small>
+                                    <div class="d-lg-none small text-muted mt-1">
+                                        <div><i class="fas fa-door-open"></i> {{ $item->ruang->nama_ruang }}</div>
+                                        <div><i class="fas fa-calendar"></i> {{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d/m/Y') }}</div>
+                                        <div><i class="fas fa-clock"></i> {{ $item->waktu_mulai }} - {{ $item->waktu_selesai }}</div>
+                                    </div>
                                 </td>
-                                <td>
+                                <td class="d-none d-lg-table-cell">
                                     <strong>{{ $item->ruang->nama_ruang }}</strong>
                                     <br>
                                     <small class="text-muted">{{ $item->ruang->kapasitas }} orang</small>
                                 </td>
-                                <td>
+                                <td class="d-none d-md-table-cell">
                                     {{ \Carbon\Carbon::parse($item->tanggal_pinjam)->format('d/m/Y') }}
                                     @if($item->tanggal_pinjam != $item->tanggal_kembali)
                                         <br>
                                         <small class="text-muted">s/d {{ \Carbon\Carbon::parse($item->tanggal_kembali)->format('d/m/Y') }}</small>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="d-none d-lg-table-cell">
                                     <span class="badge bg-primary">{{ $item->waktu_mulai }}</span>
                                     <br>
                                     <span class="badge bg-secondary">{{ $item->waktu_selesai }}</span>
                                 </td>
-                                <td>{{ Str::limit($item->keperluan, 50) }}</td>
-                                <td>{{ $item->created_at->format('d/m/Y H:i') }}</td>
+                                <td class="d-none d-lg-table-cell">{{ Str::limit($item->keperluan, 50) }}</td>
+                                <td class="d-none d-lg-table-cell">{{ $item->created_at->format('d/m/Y H:i') }}</td>
                                 <td>
-                                    <div class="btn-group">
+                                    <div class="btn-group" role="group">
                                         <a href="{{ route('admin.persetujuan.show', $item->id_peminjaman) }}" 
                                            class="btn btn-info btn-sm" title="Lihat Detail">
                                             <i class="fas fa-eye"></i>

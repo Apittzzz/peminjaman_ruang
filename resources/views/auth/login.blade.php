@@ -25,20 +25,22 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="mb-4">
-                    <label for="username" class="form-label text-muted">Username</label>
+                    <label for="username" class="form-label text-muted">Username </label>
                     <input type="text" id="username" name="username"
                            class="form-control @error('username') is-invalid @enderror"
                            value="{{ old('username') }}"
+                           maxlength="30"
                            required autofocus>
                     @error('username')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="mb-4">
-                    <label for="password" class="form-label text-muted">Password</label>
+                    <label for="password" class="form-label text-muted">Password </label>
                     <div class="input-group">
                         <input type="password" id="password" name="password"
                                class="form-control @error('password') is-invalid @enderror"
+                               maxlength="30"
                                required>
                         <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                             <i class="fas fa-eye" id="toggleIcon"></i>

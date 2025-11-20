@@ -11,7 +11,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">Tambah User Baru</h5>
@@ -43,7 +43,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class=\"col-12 col-md-6\">
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password *</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror" 
@@ -53,7 +53,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class=\"col-12 col-md-6\">
                             <div class="mb-3">
                                 <label for="password_confirmation" class="form-label">Konfirmasi Password *</label>
                                 <input type="password" class="form-control" 
@@ -63,7 +63,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class=\"col-12 col-md-6\">
                             <div class="mb-3">
                                 <label for="role" class="form-label">Role *</label>
                                 <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required>
@@ -79,13 +79,9 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Kembali
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Simpan User
-                        </button>
+                    <div class="d-flex flex-column flex-sm-row justify-content-between gap-2">
+                        <a href="{{ route('admin.users.index') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Kembali</a>
+                        <button type="submit" class="btn btn-primary"> <i class="fas fa-save"></i> Simpan User </button>                    
                     </div>
                 </form>
             </div>
