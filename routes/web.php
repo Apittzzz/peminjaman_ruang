@@ -96,4 +96,13 @@ Route::middleware('auth')->group(function ()
         Route::post('/peminjaman/{peminjaman}/cancel', [PeminjamanController::class, 'cancel'])
             ->name('peminjaman.cancel');
     });
+
+    Route::get('/admin/activity-log', [ActivityLogController::class, 'index'])
+        ->name('admin.activity-log.index');
+    
+    // Check Room Availability (AJAX)
+    Route::post('/admin/check-availability', [LaporanController::class, 'checkAvailability'])
+        ->name('admin.check-availability');
+
+
 });

@@ -284,6 +284,13 @@ footer {
 
 .stat-card {
     border-left: 4px solid;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .stat-card.pending { border-left-color: #bb8d04; }
@@ -296,6 +303,23 @@ footer {
 .stat-icon {
     font-size: 2.5rem;
     opacity: 0.8;
+}
+
+/* Card statistik responsive */
+.stat-card .card-body {
+    padding: 1rem;
+}
+
+@media (max-width: 576px) {
+    .stat-card .card-body {
+        padding: 0.75rem 0.5rem;
+    }
+    .stat-card h3 {
+        font-size: 1.5rem;
+    }
+    .stat-card small {
+        font-size: 0.7rem;
+    }
 }
 
 .table-responsive {
